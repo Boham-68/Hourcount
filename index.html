@@ -40,11 +40,11 @@
 <!-- 輸入時薪 -->
 <p>時薪：
     <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" style="-moz-appearance: textfield;"> 
-　　報滿加班費需要：<span id="AllMoney"></span> 小時
+　　報滿加班費：<span id="AllMoney"></span> 小時
 </p>
 
 <!-- 查詢月份 -->
-<p>查詢月份：
+<p>月份：
     <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
         <option value="2025">114</option>
         <option value="2026">115</option>
@@ -64,27 +64,29 @@
         <option value="11">11</option>
         <option value="12">12</option>
     </select> 月
-　基本工時：<span id="BasicHour"></span>
+</p>
+<p>基本工時：<span id="BasicHour"></span>
 </p>
 
 <p>基礎工作日：<span id="WorkdaysCount"></span>
-　國定假日：<span id="HolidayCount"></span>
-　補上班日：<span id="MakeupWorkCount"></span>
+　國定假日：<span id="HolidayCount"></span></p>
+<p>補上班日：<span id="MakeupWorkCount"></span>
 　停班日：<span id="OffDaysCount"></span></p>
 
-<p>原上班天數：<span id="ClassDays"></span>
-　實際上班天數：<span id="AllLeave"></span>
+<p>原上班天數：<span id="ClassDays"></span></p>
+<p>實際上班天數：<span id="AllLeave"></span>
 　外宿天數：<span id="HalfLeave"></span></p>
 
-<p>本月工時：<span id="WorkHour1"></span>
-　可領加班費：<span id="WorkMoney"></span>
+<p>本月工時：<span id="WorkHour1"></span></p>
+<p>可領加班費：<span id="WorkMoney"></span>
 　累積工時：<span id="WorkHour2"></span></p>
 
 <p>外勤加休：
     <input type="number" id="Leave1" placeholder="1" class="small-input" min="0" step="1" value="1" oninput="calculateTotalLeave();">
 　超勤補休：
     <input type="number" id="Leave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-　休假：
+　</p>
+<p>休假：
     <input type="number" id="Leave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> (含婚、喪等假別)
 </p>
 <p>上班改輪休：
@@ -97,19 +99,22 @@
     <input type="number" id="Class1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
 　停休改外宿：
     <input type="number" id="Class2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-　其他停休時數：
+</p>
+<p>其他停休時數：
     <input type="number" id="Class3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> 小時
 </p>
 
-<p>公假只輸入起始和結束日期，1月5日輸入「5」即可：</p>
+<p>公假只輸入起始和結束日期：</p>
 
 <p>公假１
     <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
     <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-　公假２
+</p>
+<p>公假２
     <input type="number" id="WorkLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
     <input type="number" id="WorkLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-　公假３
+</p>
+<p>公假３
     <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
     <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
 </p>
