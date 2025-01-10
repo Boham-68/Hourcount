@@ -2,55 +2,47 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人超勤計算</title>
     <style>
+        :root {
+            font-size: 16px; /* 基本字體大小，可根據需要調整 */
+        }
         body {
-            font-size: 1.5em;
+            font-size: 1.5rem; /* 這樣的設定確保在所有設備上字體大小一致 */
         }
         h1 {
-            font-size: 1.5em;
+            font-size: 1.5rem;
             margin: 0;
             padding: 10px 0;
         }
         input[type=number].small-input {
-            width: 60px;
-            padding: 5px;
-            font-size: 1em;
+            width: 3.75rem; /* 60px 轉為 rem */
+            padding: 0.3125rem; /* 5px 轉為 rem */
+            font-size: 1rem;
         }
         select {
-            font-size: 1em;
+            font-size: 1rem;
         }
-        .green-section {
-            background-color: #e6ffe6;
-            padding: 10px;
-            margin-bottom: 0;
-        }
-        .red-section {
-            background-color: #ffe6e6;
-            padding: 10px;
-            margin: 0;
-        }
-        .blue-section {
-            background-color: #e6f2ff;
-            padding: 10px;
-            margin: 0;
-        }
-        .yellow-section {
-            background-color: #fffff0;
-            padding: 10px;
-            margin: 0;
+        .green-section, .red-section, .blue-section, .yellow-section {
+            padding: 0.625rem; /* 10px 轉為 rem */
         }
         p {
-            margin: 10px 0;
+            margin: 0.625rem 0; /* 10px 轉為 rem */
         }
         .content-width {
             display: inline-block;
             width: fit-content;
         }
+        /* 色彩設定 */
+        .green-section { background-color: #e6ffe6; }
+        .red-section { background-color: #ffe6e6; }
+        .blue-section { background-color: #e6f2ff; }
+        .yellow-section { background-color: #fffff0; }
     </style>
 </head>
 <body>
-
+    
 <div class="content-width">
     <div class="green-section">
         <h1>　　　臺南市消防局外勤工時計算</h1> 
