@@ -57,7 +57,8 @@
     
     <div class="green-section">
         <h1>　臺南市消防局外勤工時計算</h1> 
-
+        
+      　　<p><a href="readme.html">使用說明點我</a></p>
         <p>班別：
             <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave();">
         <option value="A">Ａ班　(勤２休２，12/31、1/1上班)</option>
@@ -67,12 +68,11 @@
         <option value="E">Ｅ班　(勤１休１，1/1上班)</option>
         <option value="F">Ｆ班　(勤１休１，1/2上班)</option>
             </select>
-         　<a href="readme.html">使用說明</a>
         </p>
 
         <p>時薪：
             <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" style="-moz-appearance: textfield;"> 
-        　　報滿加班費：<span id="AllMoney"></span> 小時
+        　　報滿加班費時數：<span id="AllMoney"></span> 小時
         </p>
 
         <p>月份：
@@ -98,8 +98,8 @@
         　基本工時：<span id="BasicHour"></span>
         </p>
 
-        <p>本月工時：<span id="WorkHour1"></span>
-        　可領加班費：<span id="WorkMoney"></span>
+        <p>本月工時：<span id="WorkHour1"></span></p>
+        <p>可領加班費：<span id="WorkMoney"></span>
         　累積工時：<span id="WorkHour2"></span></p>
     </div>
 
@@ -143,7 +143,7 @@
             <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
             <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         </p>
-        <p>公假輸入起始和結束日期，1月5日輸入「5」即可。</p>
+        <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
     </div>
 
     <p>基礎工作日：<span id="WorkdaysCount"></span>
