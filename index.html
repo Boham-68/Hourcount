@@ -2,48 +2,55 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人超勤計算</title>
     <style>
-        :root {
-            font-size: 16px; /* 基本字體大小，可根據需要調整 */
-        }
         body {
-            font-size: 1.5rem; /* 這樣的設定確保在所有設備上字體大小一致 */
+            font-size: 1.5em;
         }
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.5em;
             margin: 0;
             padding: 10px 0;
         }
         input[type=number].small-input {
-            width: 3.75rem; /* 60px 轉為 rem */
-            padding: 0.3125rem; /* 5px 轉為 rem */
-            font-size: 1rem;
+            width: 60px;
+            padding: 5px;
+            font-size: 1em;
         }
         select {
-            font-size: 1rem;
+            font-size: 1em;
         }
-        .green-section, .red-section, .blue-section, .yellow-section {
-            padding: 0.625rem; /* 10px 轉為 rem */
+        .green-section {
+            background-color: #e6ffe6;
+            padding: 10px;
+            margin-bottom: 0;
+        }
+        .red-section {
+            background-color: #ffe6e6;
+            padding: 10px;
+            margin: 0;
+        }
+        .blue-section {
+            background-color: #e6f2ff;
+            padding: 10px;
+            margin: 0;
+        }
+        .yellow-section {
+            background-color: #fffff0;
+            padding: 10px;
+            margin: 0;
         }
         p {
-            margin: 0.625rem 0; /* 10px 轉為 rem */
+            margin: 10px 0;
         }
         .content-width {
             display: inline-block;
             width: fit-content;
         }
-        /* 色彩設定 */
-        .green-section { background-color: #e6ffe6; }
-        .red-section { background-color: #ffe6e6; }
-        .blue-section { background-color: #e6f2ff; }
-        .yellow-section { background-color: #fffff0; }
     </style>
 </head>
 <body>
     
-<div class="content-width">
     <div class="green-section">
         <h1>　　　臺南市消防局外勤工時計算</h1> 
 
@@ -146,7 +153,6 @@
     <p>　　　　　　　　　　　　　　　　　by　復興分隊 莊伯瀚</p>
 
     <p>★本表僅供參考，實際數字以超勤報表為準，計算有誤請告知。
-</div>
 
 <script>
     // 定義國定假日、補上班日和停班日
