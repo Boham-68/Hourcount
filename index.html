@@ -364,6 +364,45 @@
     calculateAllMoney();
     calculateClassDays();
     calculateTotalLeave();
+    // 初始化年月選擇的函數
+function initializeDefaultDate() {
+    const today = new Date();
+    let targetDate = new Date(today);
+    
+    // 如果當前日期超過10號，則設定為下個月
+    if (today.getDate() > 10) {
+        targetDate.setMonth(today.getMonth() + 1);
+    }
+    
+    // 獲取目標的年份和月份
+    let targetYear = targetDate.getFullYear();
+    let targetMonth = targetDate.getMonth() + 1; // getMonth() 返回 0-11
+    
+    // 設定年份選擇器
+    const yearSelect = document.getElementById('yearSelect');
+    for (let option of yearSelect.options) {
+        if (option.value === targetYear.toString()) {
+            option.selected = true;
+            break;
+        }
+    }
+    
+    // 設定月份選擇器
+    const monthSelect = document.getElementById('monthSelect');
+    for (let option of monthSelect.options) {
+        if (option.value === targetMonth.toString()) {
+            option.selected = true;
+            break;
+        }
+    }
+    
+    // 觸發計算函數以更新顯示
+    calculateClassDays();
+    calculateTotalLeave();
+}
+
+// 在頁面載入時運行初始化函數
+document.addEventListener('DOMContentLoaded', initializeDefaultDate);
 </script>
 
 </body>
