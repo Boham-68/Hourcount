@@ -105,7 +105,7 @@
 
     <div class="red-section">
         <p>　　外勤加休：
-            <input type="number" id="Leave1" placeholder="1" class="small-input" min="0" step="1" value="1" oninput="calculateTotalLeave();">
+            <input type="number" id="Leave1" placeholder="2" class="small-input" min="0" step="1" value="2" oninput="calculateTotalLeave();">
         　　　超勤補休：
             <input type="number" id="Leave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         </p>
@@ -315,15 +315,16 @@
         calculateTotalLeave();
     }
 
-    function calculateTotalLeave() {
-        const leave1 = parseInt(document.getElementById("Leave1").value) || 1;
-        const leave2 = parseInt(document.getElementById("Leave2").value) || 0;
-        const leave3 = parseInt(document.getElementById("Leave3").value) || 0;
-        const leave4 = parseInt(document.getElementById("Leave4").value) || 0;
-        const leave5 = parseInt(document.getElementById("Leave5").value) || 0;
-        const class1 = parseInt(document.getElementById("Class1").value) || 0;
-        const class2 = parseInt(document.getElementById("Class2").value) || 0;
-        const class3 = parseInt(document.getElementById("Class3").value) || 0;
+   function calculateTotalLeave() {
+    // 使用 ?? 運算符替代 ||，只有在值為 null 或 undefined 時才使用默認值
+    const leave1 = document.getElementById("Leave1").value === "" ? 2 : parseInt(document.getElementById("Leave1").value);
+    const leave2 = document.getElementById("Leave2").value === "" ? 0 : parseInt(document.getElementById("Leave2").value);
+    const leave3 = document.getElementById("Leave3").value === "" ? 0 : parseInt(document.getElementById("Leave3").value);
+    const leave4 = document.getElementById("Leave4").value === "" ? 0 : parseInt(document.getElementById("Leave4").value);
+    const leave5 = document.getElementById("Leave5").value === "" ? 0 : parseInt(document.getElementById("Leave5").value);
+    const class1 = document.getElementById("Class1").value === "" ? 0 : parseInt(document.getElementById("Class1").value);
+    const class2 = document.getElementById("Class2").value === "" ? 0 : parseInt(document.getElementById("Class2").value);
+    const class3 = document.getElementById("Class3").value === "" ? 0 : parseInt(document.getElementById("Class3").value);
 
         // 計算公假的工作日和班別日數
         const { totalWorkdays, totalClassDays } = calculateLeaveData();
