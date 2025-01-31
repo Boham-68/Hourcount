@@ -167,7 +167,7 @@
 
     <p>★本表僅供參考，實際數字以超勤報表為準。</p>
     <p>★若計算有誤，可來電告知，以便修正。</p>
-
+    <p>★114.01.31更新。</p>
 <script>
 
     // 在頁面載入時自動加載之前儲存的數據
@@ -404,29 +404,26 @@
     calculateAllMoney();
     calculateClassDays();
     calculateTotalLeave();
-
-// 初始化年月選擇的函數
+    // 初始化年月選擇的函數
 function initializeDefaultDate() {
     const today = new Date();
-    let targetDate = new Date(today);
+    let targetYear = today.getFullYear();
+    let targetMonth = today.getMonth() + 1; // getMonth() 返回 0-11，要 +1 才符合月份
 
-    // 如果當前日期超過 10 號，則設定為下個月
+    // 如果當前日期超過 10 日，則設定為下個月
     if (today.getDate() > 10) {
-        targetDate.setMonth(targetDate.getMonth() + 1);
-        if (targetDate.getMonth() === 0) { // 如果變成 1 月，則增加年份
-            targetDate.setFullYear(targetDate.getFullYear() + 1);
+        targetMonth += 1;
+        if (targetMonth > 12) { // 若超過 12 月，則進入下一年
+            targetMonth = 1;
+            targetYear += 1;
         }
     }
 
-    // 使用西元年來比對（因為 `yearSelect` 也是西元年）
-    let targetYear = targetDate.getFullYear(); 
-    let targetMonth = targetDate.getMonth() + 1; // `getMonth()` 0-11，所以要 +1
-
-    console.log(`設定年份: ${targetYear}, 設定月份: ${targetMonth}`); // 除錯用
+    console.log(`設定年份: ${targetYear}, 設定月份: ${targetMonth}`); // 確認數值
 
     // 設定年份選擇器
     const yearSelect = document.getElementById('yearSelect');
-    yearSelect.value = targetYear.toString(); // 直接設值
+    yearSelect.value = targetYear.toString();
 
     // 設定月份選擇器
     const monthSelect = document.getElementById('monthSelect');
@@ -437,26 +434,8 @@ function initializeDefaultDate() {
     calculateTotalLeave();
 }
 
-// 在頁面載入時執行
-window.onload = function() {
-    initializeDefaultDate(); // 設定年月
-
-    // 加載之前選擇的班別
-    const savedClass = localStorage.getItem('classSelect');
-    if (savedClass) {
-        document.getElementById('classSelect').value = savedClass;
-    }
-
-    // 加載之前輸入的時薪
-    const savedHourMoney = localStorage.getItem('HourMoney');
-    if (savedHourMoney) {
-        document.getElementById('HourMoney').value = savedHourMoney;
-    }
-
-    calculateClassDays();
-    calculateAllMoney();
-    calculateTotalLeave();
-};
+// 在頁面載入時運行初始化函數
+document.addEventListener('DOMContentLoaded', initializeDefaultDate);
 
 </script>
 
