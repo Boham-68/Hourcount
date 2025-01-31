@@ -404,45 +404,60 @@
     calculateAllMoney();
     calculateClassDays();
     calculateTotalLeave();
-    // 初始化年月選擇的函數
+
+// 初始化年月選擇的函數
 function initializeDefaultDate() {
     const today = new Date();
     let targetDate = new Date(today);
-    
-    // 如果當前日期超過10號，則設定為下個月
+
+    // 如果當前日期超過 10 號，則設定為下個月
     if (today.getDate() > 10) {
-        targetDate.setMonth(today.getMonth() + 1);
+        targetDate.setMonth(targetDate.getMonth() + 1);
+        if (targetDate.getMonth() === 0) { // 如果變成 1 月，則增加年份
+            targetDate.setFullYear(targetDate.getFullYear() + 1);
+        }
     }
-    
-    // 獲取目標的年份和月份
-    let targetYear = targetDate.getFullYear();
-    let targetMonth = targetDate.getMonth() + 1; // getMonth() 返回 0-11
-    
+
+    // 使用西元年來比對（因為 `yearSelect` 也是西元年）
+    let targetYear = targetDate.getFullYear(); 
+    let targetMonth = targetDate.getMonth() + 1; // `getMonth()` 0-11，所以要 +1
+
+    console.log(`設定年份: ${targetYear}, 設定月份: ${targetMonth}`); // 除錯用
+
     // 設定年份選擇器
     const yearSelect = document.getElementById('yearSelect');
-    for (let option of yearSelect.options) {
-        if (option.value === targetYear.toString()) {
-            option.selected = true;
-            break;
-        }
-    }
-    
+    yearSelect.value = targetYear.toString(); // 直接設值
+
     // 設定月份選擇器
     const monthSelect = document.getElementById('monthSelect');
-    for (let option of monthSelect.options) {
-        if (option.value === targetMonth.toString()) {
-            option.selected = true;
-            break;
-        }
-    }
-    
+    monthSelect.value = targetMonth.toString();
+
     // 觸發計算函數以更新顯示
     calculateClassDays();
     calculateTotalLeave();
 }
 
-// 在頁面載入時運行初始化函數
-document.addEventListener('DOMContentLoaded', initializeDefaultDate);
+// 在頁面載入時執行
+window.onload = function() {
+    initializeDefaultDate(); // 設定年月
+
+    // 加載之前選擇的班別
+    const savedClass = localStorage.getItem('classSelect');
+    if (savedClass) {
+        document.getElementById('classSelect').value = savedClass;
+    }
+
+    // 加載之前輸入的時薪
+    const savedHourMoney = localStorage.getItem('HourMoney');
+    if (savedHourMoney) {
+        document.getElementById('HourMoney').value = savedHourMoney;
+    }
+
+    calculateClassDays();
+    calculateAllMoney();
+    calculateTotalLeave();
+};
+
 </script>
 
 </body>
