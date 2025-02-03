@@ -148,6 +148,7 @@
             <div class="green-content">
                     <!-- 第一行 -->
     <div class="green-item first-line">
+       <div class="green-item">
                 <!-- 班別選擇 -->
                     <label>班別：</label>
                     <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave(); saveClassSelection();">
@@ -159,16 +160,19 @@
                         <option value="F">Ｆ班(勤1休1，1/2上班)</option>
                     </select>
                     <a href="readme.html">說明</a>　　
-
+ </div>
+                <div class="green-item">
                 <!-- 時薪和報滿加班費 -->
                     <label>時薪：</label>
                     <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" style="-moz-appearance: textfield;" oninput="saveHourMoney();">
-     
+                     </div>
+                <div class="green-item">
                     <label>　　報滿加班費時數：</label>
                     <span id="AllMoney"></span> 小時
- 
+         </div>
         </div>
                     <div class="green-item second-line">
+                                        <div class="green-item">
                 <!-- 年月選擇和基本工時 -->
                     <label>月份：</label>
                     <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
@@ -193,23 +197,28 @@
                 <option value="12">12</option>
                     </select>
                     月　
-
+                     </div>
+                <div class="green-item">
                     <label>基本工時：</label>
                     <span id="BasicHour"></span>　
-
+                     </div>
+                <div class="green-item">
                 <!-- 本月工時和加班費資訊 -->
 
                     <label>本月工時：</label>
                     <span id="WorkHour1"></span>　
-
+                     </div>
+                <div class="green-item">
                     <label>可領加班費</label>
                     <span id="WorkMoney"></span>　
-
+                     </div>
+                <div class="green-item">
                     <label>累積工時：</label>
                     <span id="WorkHour2"></span>
                 </div>
             </div>
         </div>
+              </div>
         <!-- 其他區塊保持不變 -->
         <div class="flex-row">
             <div class="red-section">
