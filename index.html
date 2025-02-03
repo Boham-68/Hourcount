@@ -100,6 +100,21 @@
 
 /* 電腦版綠色區塊排版 */
 @media screen and (min-width: 769px) {
+            .green-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .green-item.first-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+        }
+        .green-item.second-line {
+            width: 100%;
+        }
             .flex-row {
                 display: flex;
                 gap: 0px;
@@ -130,8 +145,9 @@
         <div class="green-section">
             <h1>臺南市消防局外勤工時計算</h1>
             <div class="green-content">
+                   <!-- 第一行 -->
+    <div class="green-item first-line">
                 <!-- 班別選擇 -->
-                <div class="green-item full-width">
                     <label>班別：</label>
                     <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave(); saveClassSelection();">
                         <option value="A">Ａ班(勤2休2，12/31、1/1上班)</option>
@@ -153,8 +169,10 @@
                     <label>　　報滿加班費時數：</label>
                     <span id="AllMoney"></span> 小時
                 </div>
+                </div>
                 <!-- 年月選擇和基本工時 -->
-                <div class="green-item">
+                <!-- 第二行 -->
+    <div class="green-item second-line">
                     <label>月份：</label>
                     <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
                         <option value="2025">114</option>
@@ -179,21 +197,17 @@
                     </select>
                     月　
                 </div>
-                <div class="green-item">
                     <label>基本工時：</label>
                     <span id="BasicHour"></span>　
                 </div>
 
                 <!-- 本月工時和加班費資訊 -->
-                <div class="green-item">
                     <label>本月工時：</label>
                     <span id="WorkHour1"></span>　
                 </div>
-                <div class="green-item">
                     <label>可領加班費</label>
                     <span id="WorkMoney"></span>　
                 </div>
-                <div class="green-item">
                     <label>累積工時：</label>
                     <span id="WorkHour2"></span>
                 </div>
