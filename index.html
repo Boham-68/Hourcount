@@ -105,6 +105,11 @@
                 gap: 0px;
                 width: 100%;
             }
+   .row {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+    }
         body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
         font-size: 18px; /* 您可以根據需要調整這裡的數值 */
     }
@@ -130,8 +135,10 @@
         <div class="green-section">
             <h1>臺南市消防局外勤工時計算</h1>
             <div class="green-content">
+            <!-- 班別選擇、時薪和報滿加班費 -->
+            <div class="row">
                 <!-- 班別選擇 -->
-                <div class="green-item full-width">
+                <div class="green-item">
                     <label>班別：</label>
                     <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave(); saveClassSelection();">
                         <option value="A">Ａ班(勤2休2，12/31、1/1上班)</option>
@@ -153,6 +160,9 @@
                     <label>　　報滿加班費時數：</label>
                     <span id="AllMoney"></span> 小時
                 </div>
+            </div>
+            <!-- 年月選擇和基本工時 -->
+            <div class="row">
                 <!-- 年月選擇和基本工時 -->
                 <div class="green-item">
                     <label>月份：</label>
@@ -199,6 +209,7 @@
                 </div>
             </div>
         </div>
+    </div>
         <!-- 其他區塊保持不變 -->
         <div class="flex-row">
             <div class="red-section">
