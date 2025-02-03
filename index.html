@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人超勤計算</title>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-95DFDYE2EX"></script>
@@ -12,91 +13,155 @@
 
   gtag('config', 'G-95DFDYE2EX');
 </script>
-    <style>
+       <style>
+        /* 基礎樣式 */
         body {
+            margin: 0;
+            padding: 15px;
             font-size: 1.5em;
+        }
+        p {
+    margin: 2px 0; /* 上下間距縮小 */
         }
         h1 {
             font-size: 1.5em;
             margin: 0;
             padding: 10px 0;
-        }
+        }       
         input[type=number].small-input {
             width: 60px;
             padding: 5px;
             font-size: 1em;
-        }
+        }       
         select {
             font-size: 1em;
         }
+        /* 區塊基礎樣式 */
+        .section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0px;
+        }
+        /* 綠色區塊內容排版 */
+        .green-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .green-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .green-section,
+        .red-section,
+        .blue-section,
+        .yellow-section,
+        .white-section {
+            padding: 5px;
+        }
         .green-section {
             background-color: #e6ffe6;
-            padding: 10px;
-            margin-bottom: 0;
-            width: 55%;
+            width: 100%;
         }
         .red-section {
             background-color: #ffe6e6;
-            padding: 10px;
-            margin: 0;
-            width: 55%;
         }
         .blue-section {
             background-color: #e6f2ff;
-            padding: 10px;
-            margin: 0;
-            width: 55%;
         }
         .yellow-section {
             background-color: #fffff0;
-            padding: 10px;
-            margin: 0;
-            width: 55%;
         }
-         .white-section {
+        .white-section {
             background-color: #ffffff;
-            padding: 10px;
-            margin: 0;
-            width: 55%;
+        }
+        /* 手機版樣式 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 0;
+            }         
+            .green-section,
+            .red-section,
+            .blue-section,
+            .yellow-section,
+            .white-section {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .section-container {
+                flex-direction: column;
+            }
+            /* 調整字體大小 */
+    body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
+        font-size: 14px; /* 您可以根據需要調整這裡的數值 */
+    }
         }
 
-        p {
-            margin: 10px 0;
-        }
-        .content-width {
-            display: inline-block;
-            width: fit-content;
+/* 電腦版綠色區塊排版 */
+@media screen and (min-width: 769px) {
+            .flex-row {
+                display: flex;
+                gap: 0px;
+                width: 100%;
+            }
+            .red-section {
+                width: 50%;
+            }
+            .blue-section {
+                width: 50%;
+            }
+            .yellow-section {
+                width: 50%;
+            }
+            .white-section {
+                width: 50%;
+            }
         }
     </style>
+
 </head>
 <body>
-    
-    <div class="green-section">
-        <h1>　臺南市消防局外勤工時計算</h1> 
+    <div class="section-container">
+        <!-- 綠色區塊 -->
+        <div class="green-section">
+            <h1>臺南市消防局外勤工時計算</h1>
+            <div class="green-content">
+                <!-- 班別選擇 -->
+                <div class="green-item full-width">
+                    <label>班別：</label>
+                    <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave(); saveClassSelection();">
+                        <option value="A">Ａ班(勤2休2，12/31、1/1上班)</option>
+                        <option value="B">Ｂ班(勤2休2，1/2、1/3上班)</option>
+                        <option value="C">Ｃ班(勤2休2，1/1、1/2上班)</option>
+                        <option value="D">Ｄ班(勤2休2，1/3、1/4上班)</option>
+                        <option value="E">Ｅ班(勤1休1，1/1上班)</option>
+                        <option value="F">Ｆ班(勤1休1，1/2上班)</option>
+                    </select>
+                    <a href="readme.html">說明</a>　　
+                </div>
 
-<p>班別：
-    <select id="classSelect" onchange="calculateClassDays(); calculateTotalLeave(); saveClassSelection();">
-        <option value="A">Ａ班(勤2休2，12/31、1/1上班)</option>
-        <option value="B">Ｂ班(勤2休2，1/2、1/3上班)</option>
-        <option value="C">Ｃ班(勤2休2，1/1、1/2上班)</option>
-        <option value="D">Ｄ班(勤2休2，1/3、1/4上班)</option>
-        <option value="E">Ｅ班(勤1休1，1/1上班)</option>
-        <option value="F">Ｆ班(勤1休1，1/2上班)</option>
-    </select>
-    　<a href="readme.html">說明</a>
-</p>
+                <!-- 時薪和報滿加班費 -->
+                <div class="green-item">
+                    <label>時薪：</label>
+                    <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" style="-moz-appearance: textfield;" oninput="saveHourMoney();">
+                </div>
+                <div class="green-item">
+                    <label>　　報滿加班費時數：</label>
+                    <span id="AllMoney"></span> 小時
+                </div>
 
-<p>時薪：
-    <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" style="-moz-appearance: textfield;" oninput="saveHourMoney();"> 
-    　　報滿加班費時數：<span id="AllMoney"></span> 小時
-</p>
-        <p>月份：
-            <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
-                <option value="2025">114</option>
-                <option value="2026">115</option>
-                <option value="2027">116</option>
-            </select> 年 
-            <select id="monthSelect" onchange="calculateClassDays(); calculateTotalLeave();">
+                <!-- 年月選擇和基本工時 -->
+                <div class="green-item">
+                    <label>月份：</label>
+                    <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
+                        <option value="2025">114</option>
+                        <option value="2026">115</option>
+                        <option value="2027">116</option>
+                    </select>
+                    年
+                    <select id="monthSelect" onchange="calculateClassDays(); calculateTotalLeave();">
+                        <!-- 月份選項 -->
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -109,16 +174,34 @@
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
-            </select> 月
-        　基本工時：<span id="BasicHour"></span>
-        </p>
+                    </select>
+                    月　
+                </div>
+                <div class="green-item">
+                    <label>基本工時：</label>
+                    <span id="BasicHour"></span>　
+                </div>
 
-        <p>本月工時：<span id="WorkHour1"></span></p>
-        <p>可領加班費：<span id="WorkMoney"></span>
-        　累積工時：<span id="WorkHour2"></span></p>
-    </div>
+                <!-- 本月工時和加班費資訊 -->
+                <div class="green-item">
+                    <label>本月工時：</label>
+                    <span id="WorkHour1"></span>　
+                </div>
+                <div class="green-item">
+                    <label>可領加班費</label>
+                    <span id="WorkMoney"></span>　
+                </div>
+                <div class="green-item">
+                    <label>累積工時：</label>
+                    <span id="WorkHour2"></span>
+                </div>
+            </div>
+        </div>
 
-    <div class="red-section">
+        <!-- 其他區塊保持不變 -->
+        <div class="flex-row">
+            <div class="red-section">
+                <!-- 紅色區塊內容 -->
         <p>　　外勤加休：
             <input type="number" id="Leave1" placeholder="2" class="small-input" min="0" step="1" value="2" oninput="calculateTotalLeave();">
         　　　超勤補休：
@@ -132,9 +215,9 @@
         　不扣時數外宿：
             <input type="number" id="Leave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         </p>
-    </div>
-
-    <div class="blue-section">
+            </div>
+            <div class="blue-section">
+                <!-- 藍色區塊內容 -->
         <p>　　停休整日：
             <input type="number" id="Class1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         　　停休改外宿：
@@ -143,9 +226,13 @@
         <p>其他停休時數：
             <input type="number" id="Class3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> 小時
         </p>
-    </div>
 
-    <div class="yellow-section">
+            </div>
+        </div>
+
+        <div class="flex-row">
+            <div class="yellow-section">
+                <!-- 黃色區塊內容 -->
         <p>　　　　公假１
             <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
             <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
@@ -159,23 +246,23 @@
             <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         </p>
         <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
-    </div>
-
-        <div class="white-section">
-    <p>基礎工作日：<span id="WorkdaysCount"></span>
-    　國定假日：<span id="HolidayCount"></span></p>
-    <p>補上班日：<span id="MakeupWorkCount"></span>
-    　停班日：<span id="OffDaysCount"></span></p>
-
+            </div>
+            <div class="white-section">
+                <!-- 白色區塊內容 -->
+    <p>基礎工作日：<span id="WorkdaysCount"></span></p>
+    <p>國定假日：<span id="HolidayCount"></span>
+       　補上班日：<span id="MakeupWorkCount"></span>
+       　停班日：<span id="OffDaysCount"></span></p>
     <p>原上班：<span id="ClassDays"></span>
-    實際上班：<span id="AllLeave"></span>
-    外宿：<span id="HalfLeave"></span></p>
+       　實際上班：<span id="AllLeave"></span>
+       　外宿：<span id="HalfLeave"></span></p>
+    <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
+    <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
+    <p>☆若計算有誤，可來電告知，以便修正。</p>
+    <p>☆114.02.03更新。</p>
 
-    <p>★★復興分隊　莊伯瀚　製作★★</p>
-
-    <p>★本表僅供參考，實際數字以超勤報表為準。</p>
-    <p>★若計算有誤，可來電告知，以便修正。</p>
-    <p>★114.01.31更新。</p>
+            </div>
+        </div>
     </div>
 <script>
 
