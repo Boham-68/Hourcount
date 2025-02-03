@@ -106,12 +106,17 @@
                 width: 100%;
             }
 /* 電腦版綠色區塊換行 */
-            .row {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                width: 100%;
-            }
+    .row-desktop {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        flex-wrap: nowrap; /* 讓內容不換行 */
+    }
+    .row-desktop > .green-item {
+        flex: 1;
+        white-space: nowrap; /* 避免內容換行 */
+    }
         body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
         font-size: 18px; /* 您可以根據需要調整這裡的數值 */
     }
@@ -138,7 +143,7 @@
             <h1>臺南市消防局外勤工時計算</h1>
             <div class="green-content">
         <!-- 第一行（班別、時薪、報滿加班費時數） -->
-        <div class="row">
+        <div class="row-desktop">
                 <!-- 班別選擇 -->
                 <div class="green-item full-width">
                     <label>班別：</label>
@@ -164,7 +169,7 @@
                 </div>
             </div>
          <!-- 第二行（月份、基本工時、本月工時、可領加班費、累積工時） -->
-        <div class="row">
+        <div class="row-desktop">
                 <!-- 年月選擇和基本工時 -->
                 <div class="green-item">
                     <label>月份：</label>
