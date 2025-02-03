@@ -100,21 +100,22 @@
 
 /* 電腦版綠色區塊排版 */
 @media screen and (min-width: 769px) {
-        .green-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        .green-item.first-line {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-grow: 1;
-        }
-        .green-item.second-line {
-            width: 100%;
-        }
+    .green-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+    .green-item.first-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-grow: 1;
+        flex-wrap: nowrap; /* 確保第一行不換行 */
+    }
+    .green-item.second-line {
+        width: 100%;
+    }  
             .flex-row {
                 display: flex;
                 gap: 0px;
