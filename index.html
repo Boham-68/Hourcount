@@ -43,6 +43,16 @@
             gap: 0px;
         }
         /* 綠色區塊內容排版 */
+        .green-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .green-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .green-section,
         .red-section,
         .blue-section,
@@ -90,12 +100,12 @@
 
 /* 電腦版綠色區塊排版 */
 @media screen and (min-width: 769px) {
+
             .flex-row {
                 display: flex;
                 gap: 0px;
                 width: 100%;
             }
-
         body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
         font-size: 18px; /* 您可以根據需要調整這裡的數值 */
     }
@@ -146,7 +156,7 @@
                 </div>
                 <!-- 年月選擇和基本工時 -->
                 <div class="green-item">
-                <p><label>月份：</label>
+                    <label>月份：</label>
                     <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
                         <option value="2025">114</option>
                         <option value="2026">115</option>
@@ -172,7 +182,7 @@
                 </div>
                 <div class="green-item">
                     <label>基本工時：</label>
-                    <span id="BasicHour"></span>　</p>
+                    <span id="BasicHour"></span>　
                 </div>
 
                 <!-- 本月工時和加班費資訊 -->
