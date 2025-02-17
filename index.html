@@ -251,6 +251,7 @@
             <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
         </p>
         <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
+        <p>公假計算方式請詳閱說明。</p>
             </div>
             <div class="white-section">
                 <!-- 白色區塊內容 -->
@@ -265,6 +266,7 @@
     <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
     <p>☆若計算有誤，可來電告知，以便修正。</p>
     <p>☆114.02.03更新：1.電腦版及手機版畫面優化。</p>
+    <p>☆114.02.17更新：1.公假計算及說明修正。</p>
 
             </div>
         </div>
@@ -333,35 +335,38 @@
 
     // 修改後的函數，分開計算工作日和班別日
     function getDaysInRange(startDate, endDate, selectedClass) {
-        if (!startDate || !endDate || startDate > endDate) return { workdays: 0, classDays: 0 };
-        
-        let workdays = 0;
-        let classDays = 0;
-        const classes = ["d1", "d2", "d3", "d4"];
-        
-        // 計算初始的班別索引
-        const daysSinceStart = Math.floor((new Date(startDate) - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24));
-        let currentClassIndex = daysSinceStart % classes.length;
+    if (!startDate || !endDate || startDate > endDate) return { workdays: 0, classDays: 0 };
+    
+    let workdays = 0;
+    let classDays = 0;
+    const classes = ["d1", "d2", "d3", "d4"];
+    
+    // 計算初始的班別索引
+    const daysSinceStart = Math.floor((new Date(startDate) - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24));
+    let currentClassIndex = daysSinceStart % classes.length;
 
-        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-            const dayOfWeek = date.getDay();
-            const dateWithoutTime = date.setHours(0, 0, 0, 0);
+    for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        const dayOfWeek = date.getDay();
+        const dateWithoutTime = date.setHours(0, 0, 0, 0);
 
-            // 計算工作日（週一至週五且不是假日）
-            if (dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateWithoutTime)) {
-                workdays++;
-            }
-            
-            // 單純判斷是否為該班別的日子
-            if (isClassDay(classes[currentClassIndex], selectedClass)) {
-                classDays++;
-            }
-            
-            currentClassIndex = (currentClassIndex + 1) % classes.length;
+        // 修改工作日計算邏輯：
+        // 1. 是週一至週五且不是假日，或
+        // 2. 是補班日
+        if ((dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateWithoutTime)) || 
+            makeupWorkDays.includes(dateWithoutTime)) {
+            workdays++;
         }
-
-        return { workdays, classDays };
+        
+        // 單純判斷是否為該班別的日子
+        if (isClassDay(classes[currentClassIndex], selectedClass)) {
+            classDays++;
+        }
+        
+        currentClassIndex = (currentClassIndex + 1) % classes.length;
     }
+
+    return { workdays, classDays };
+}
 
     function calculateLeaveData() {
         const year = parseInt(document.getElementById("yearSelect").value);
