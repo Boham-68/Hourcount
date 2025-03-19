@@ -263,8 +263,8 @@
        　外宿：<span id="HalfLeave"></span></p>
     <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
     <p>☆114.03.19更新：1.因115年行事曆尚未公告，故僅開放查詢至114年。</p>
+    <p>☆114.03.19更新：2.變更班別顯示，改以查詢日上班或輪休為準。</p>
     <p>☆114.02.17更新：1.公假計算及說明修正。</p>
-    <p>☆114.02.03更新：1.電腦版及手機版畫面優化。</p>
     <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
     <p>☆若計算有誤，可來電告知，以便修正。</p>
 
@@ -304,6 +304,57 @@
         const hourMoney = document.getElementById('HourMoney').value;
         localStorage.setItem('HourMoney', hourMoney);
     }
+    // 班別依照今日日期改變顯示
+function updateClassOptions() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const formattedDate = `今日(${month}/${day})`;
+
+    const dayOffset4 = Math.floor((today - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24)) % 4;
+    const dayOffset2 = Math.floor((today - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24)) % 2;
+
+    const workShifts4 = {
+        A: [3], // A班上班第一天
+        B: [1], // B班上班第一天
+        C: [0], // C班上班第一天
+        D: [2], // D班上班第一天
+    };
+
+    const workShifts2 = {
+        E: [0], // E班上班
+        F: [1]  // F班上班
+    };
+
+    const classSelect = document.getElementById('classSelect');
+    for (let option of classSelect.options) {
+        const classType = option.value;
+        if (['A', 'B', 'C', 'D'].includes(classType)) {
+            if (workShifts4[classType].includes(dayOffset4)) {
+                option.textContent = `${classType}班，${formattedDate}上班第1天`;
+            } else if (workShifts4[classType].includes((dayOffset4 + 3) % 4)) {
+                option.textContent = `${classType}班，${formattedDate}上班第2天`;
+            } else if (workShifts4[classType].includes((dayOffset4 + 2) % 4)) {
+                option.textContent = `${classType}班，${formattedDate}輪休第1天`;
+            } else if (workShifts4[classType].includes((dayOffset4 + 1) % 4)) {
+                option.textContent = `${classType}班，${formattedDate}輪休第2天`;
+            } else {
+                option.textContent = `${classType}班`;
+            }
+        } else if (['E', 'F'].includes(classType)) {
+            if (workShifts2[classType].includes(dayOffset2)) {
+                option.textContent = `${classType}班，${formattedDate}上班`;
+            } else {
+                option.textContent = `${classType}班，${formattedDate}輪休`;
+            }
+        } else {
+            option.textContent = `${classType}班`;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateClassOptions);
+
     // 定義國定假日、補上班日和停班日
     const holidays = [
         new Date('2025-01-01').setHours(0, 0, 0, 0), // 新年
