@@ -161,7 +161,7 @@ h1 {
         <!-- 綠色區塊 -->
         <div class="green-section">
             <h1>臺南市消防局外勤工時計算</h1>
-            <div class="marquee"><span>1.時薪已於5月26日調整，可上差勤系統查詢。2.週六日請公假考試時數會計算為0，請自行調整，詳閱公假計算規則。3.本表計算上班日休息3小時，如時數有增減，可在其他停休時數中調整，該欄位也可輸入負數。</span></div>
+            <div class="marquee"><span>1.新增下半年假日(教師節、光復節、行憲紀念日)、115年假日(含消防節)，開放115年工時查詢。2.時薪已於5月26日調整，可上差勤系統查詢。3.週六日請公假考試時數會計算為0，請自行調整，詳閱公假計算規則。</span></div>
             <div class="green-content">
                 <!-- 班別選擇 -->
                 <div class="green-item full-width">
@@ -191,6 +191,7 @@ h1 {
                     <label>月份：</label>
                     <select id="yearSelect" onchange="calculateClassDays(); calculateTotalLeave();">
                         <option value="2025">114</option>
+                        <option value="2026">115</option>
 
                     </select>
                     年
@@ -291,9 +292,9 @@ h1 {
        　實際上班：<span id="AllLeave"></span>
        　外宿：<span id="HalfLeave"></span></p>
     <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
+    <p>☆114.06.13：新增下半年假日(教師節、光復節、行憲紀念日)、115年假日(含消防節)，開放115年工時查詢。</p>
     <p>☆114.05.26：時薪已於5月26日調整，可上差勤系統查詢。</p>
-    <p>☆114.05.19：週六日請公假考試時數會計算為0，請自行調整，詳閱公假計算規則。</p>
-    <p>☆114.05.09：本表計算上班日休息3小時，如時數有增減，可在其他停休時數中調整，該欄位也可輸入負數。</p>             
+    <p>☆114.05.19：週六日請公假考試時數會計算為0，請自行調整，詳閱公假計算規則。</p>            
     <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
     <p>☆若計算有誤，可來電告知，以便修正。</p>
 
@@ -396,8 +397,28 @@ document.addEventListener('DOMContentLoaded', updateClassOptions);
         new Date('2025-04-03').setHours(0, 0, 0, 0), // 清明節補假
         new Date('2025-04-04').setHours(0, 0, 0, 0), // 兒童節
         new Date('2025-05-30').setHours(0, 0, 0, 0), // 端午節補假
+        new Date('2025-09-29').setHours(0, 0, 0, 0), // 教師節補假
         new Date('2025-10-06').setHours(0, 0, 0, 0), // 中秋節
         new Date('2025-10-10').setHours(0, 0, 0, 0), // 國慶日
+        new Date('2025-10-24').setHours(0, 0, 0, 0), // 光復節補假
+        new Date('2025-12-25').setHours(0, 0, 0, 0), // 行憲紀念日
+        new Date('2026-01-01').setHours(0, 0, 0, 0), // 新年
+        new Date('2026-01-19').setHours(0, 0, 0, 0), // 消防節
+        new Date('2026-02-16').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-17').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-18').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-19').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-20').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-27').setHours(0, 0, 0, 0), // 和平紀念日補假
+        new Date('2026-04-03').setHours(0, 0, 0, 0), // 兒童節補假
+        new Date('2026-04-06').setHours(0, 0, 0, 0), // 清明節補假
+        new Date('2026-05-01').setHours(0, 0, 0, 0), // 勞動節
+        new Date('2026-06-19').setHours(0, 0, 0, 0), // 端午節補假
+        new Date('2026-09-25').setHours(0, 0, 0, 0), // 中秋節
+        new Date('2026-09-28').setHours(0, 0, 0, 0), // 教師節
+        new Date('2026-10-09').setHours(0, 0, 0, 0), // 國慶日補假
+        new Date('2026-10-26').setHours(0, 0, 0, 0), // 光復節補假
+        new Date('2026-12-25').setHours(0, 0, 0, 0), // 行憲紀念日
         // 更多國定假日...
     ];
 
