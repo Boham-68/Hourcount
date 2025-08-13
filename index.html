@@ -161,7 +161,7 @@ h1 {
         <!-- 綠色區塊 -->
         <div class="green-section">
             <h1>臺南市消防局外勤工時計算</h1>
-            <div class="marquee"><span>1.新增114.07.29豪大雨停止上班。2.新增114.07.07丹娜絲颱風停止上班。3.新增下半年假日(教師節、光復節、行憲紀念日)、115年假日(含消防節)，開放115年工時查詢。</span></div>
+            <div class="marquee" id="marquee-container"><span>載入中...</span></div>
             <div class="green-content">
                 <!-- 班別選擇 -->
                 <div class="green-item full-width">
@@ -642,59 +642,63 @@ function initializeDefaultDate() {
     calculateTotalLeave();
 }
 
-        // GitHub 原始檔案的網址
-        const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
+// GitHub 原始檔案的網址
+const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
 
-        // 取得 HTML 頁面上的容器元素
-        const updatesContainer = document.getElementById('updates-container');
+// 取得 HTML 頁面上的容器元素
+const updatesContainer = document.getElementById('updates-container');
+const marqueeContainer = document.getElementById('marquee-container'); // 新增這行
 
-        // 定義一個非同步函式來抓取並顯示更新內容
-        async function fetchAndDisplayUpdates() {
-            try {
-                // 使用 fetch 函式向 GitHub 網址發送請求
-                const response = await fetch(updatesUrl);
-                
-                // 檢查請求是否成功
-                if (!response.ok) {
-                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                }
-
-                // 取得回應的文字內容
-                const text = await response.text();
-
-                // 將文字內容按行分割
-                const lines = text.split('\n');
-
-                // 只取出前三行更新內容
-                const recentUpdates = lines.slice(0, 3);
-
-                // 清空容器
-                updatesContainer.innerHTML = '';
-                
-                const ul = document.createElement('ul');
-
-                recentUpdates.forEach(update => {
-                    if (update.trim() !== '') {
-                        const li = document.createElement('li');
-                        li.textContent = update;
-                        ul.appendChild(li);
-                    }
-                });
-                
-                if (ul.children.length > 0) {
-                    updatesContainer.appendChild(ul);
-                } else {
-                    updatesContainer.textContent = '目前沒有更新紀錄。';
-                }
-
-            } catch (error) {
-                console.error('抓取更新資料時發生錯誤:', error);
-                updatesContainer.textContent = '無法載入更新紀錄。';
-            }
+async function fetchAndDisplayUpdates() {
+    try {
+        const response = await fetch(updatesUrl);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
         }
 
-        // 當網頁載入完成後，執行我們的函式
-        document.addEventListener('DOMContentLoaded', fetchAndDisplayUpdates);
+        const text = await response.text();
+        const lines = text.split('\n');
+        const recentUpdates = lines.slice(0, 3);
+        
+        // 檢查是否有更新內容
+        const hasUpdates = recentUpdates.some(line => line.trim() !== '');
+
+        if (hasUpdates) {
+            // ----- 新增及修改部分開始 -----
+            // 將所有更新內容整合成一個字串，並用分隔符號串接
+            const updatesText = recentUpdates.filter(line => line.trim() !== '').join(' | ');
+
+            // 將跑馬燈的內容設定為這個字串
+            marqueeContainer.innerHTML = `<span>${updatesText}</span>`;
+            // ----- 新增及修改部分結束 -----
+
+            // 清空 updates-container 並建立列表
+            updatesContainer.innerHTML = '';
+            const ul = document.createElement('ul');
+            recentUpdates.forEach(update => {
+                if (update.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = update;
+                    ul.appendChild(li);
+                }
+            });
+            updatesContainer.appendChild(ul);
+
+        } else {
+            // 如果沒有更新內容，兩個容器都顯示提示訊息
+            updatesContainer.textContent = '目前沒有更新紀錄。';
+            marqueeContainer.innerHTML = '<span>目前沒有更新紀錄。</span>';
+        }
+
+    } catch (error) {
+        console.error('抓取更新資料時發生錯誤:', error);
+        updatesContainer.textContent = '無法載入更新紀錄。';
+        marqueeContainer.innerHTML = '<span>無法載入更新紀錄。</span>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', fetchAndDisplayUpdates);
     
 // 在頁面載入時運行初始化函數
 document.addEventListener('DOMContentLoaded', initializeDefaultDate);
@@ -704,6 +708,7 @@ document.addEventListener('DOMContentLoaded', initializeDefaultDate);
 
 </body>
 </html>
+
 
 
 
