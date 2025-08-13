@@ -292,6 +292,7 @@ h1 {
        　實際上班：<span id="AllLeave"></span>
        　外宿：<span id="HalfLeave"></span></p>
     <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
+<div id="updates-container"></div>
     <p>☆114.07.29：新增114.07.29豪大雨停止上班。</p>
     <p>☆114.07.07：新增114.07.07丹娜絲颱風停止上班。</p>
     <p>☆114.06.13：新增下半年假日(教師節、光復節、行憲紀念日)、115年假日(含消防節)，開放115年工時查詢。</p>
@@ -644,10 +645,66 @@ function initializeDefaultDate() {
     calculateTotalLeave();
 }
 
+        // GitHub 原始檔案的網址
+        const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
+
+        // 取得 HTML 頁面上的容器元素
+        const updatesContainer = document.getElementById('updates-container');
+
+        // 定義一個非同步函式來抓取並顯示更新內容
+        async function fetchAndDisplayUpdates() {
+            try {
+                // 使用 fetch 函式向 GitHub 網址發送請求
+                const response = await fetch(updatesUrl);
+                
+                // 檢查請求是否成功
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+                }
+
+                // 取得回應的文字內容
+                const text = await response.text();
+
+                // 將文字內容按行分割
+                const lines = text.split('\n');
+
+                // 只取出前三行更新內容
+                const recentUpdates = lines.slice(0, 3);
+
+                // 清空容器
+                updatesContainer.innerHTML = '';
+                
+                const ul = document.createElement('ul');
+
+                recentUpdates.forEach(update => {
+                    if (update.trim() !== '') {
+                        const li = document.createElement('li');
+                        li.textContent = update;
+                        ul.appendChild(li);
+                    }
+                });
+                
+                if (ul.children.length > 0) {
+                    updatesContainer.appendChild(ul);
+                } else {
+                    updatesContainer.textContent = '目前沒有更新紀錄。';
+                }
+
+            } catch (error) {
+                console.error('抓取更新資料時發生錯誤:', error);
+                updatesContainer.textContent = '無法載入更新紀錄。';
+            }
+        }
+
+        // 當網頁載入完成後，執行我們的函式
+        document.addEventListener('DOMContentLoaded', fetchAndDisplayUpdates);
+    
 // 在頁面載入時運行初始化函數
 document.addEventListener('DOMContentLoaded', initializeDefaultDate);
+
 
 </script>
 
 </body>
 </html>
+
