@@ -651,7 +651,8 @@ const marqueeContainer = document.getElementById('marquee-container'); // 新增
 
 async function fetchAndDisplayUpdates() {
     try {
-        const response = await fetch(updatesUrl);
+        // 在網址後面加上一個唯一的亂數，來避免快取問題
+const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
         
         if (!response.ok) {
             throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
@@ -708,6 +709,7 @@ document.addEventListener('DOMContentLoaded', initializeDefaultDate);
 
 </body>
 </html>
+
 
 
 
