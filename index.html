@@ -543,8 +543,8 @@
                 }
 
                 // 計算需要請假的天數 (週一到週五，不含假日和停班日)
-                if (dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateTimestamp) && !offDays.includes(dateTimestamp)) {
-                    absenceDaysCount++;
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                     absenceDaysCount++;
                 }
 
                 // 計算輪值上班日數
@@ -829,3 +829,4 @@
     </script>
 </body>
 </html>
+
