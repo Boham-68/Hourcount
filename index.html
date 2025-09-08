@@ -1,763 +1,831 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人超勤計算</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-95DFDYE2EX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-95DFDYE2EX');
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人超勤計算</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-95DFDYE2EX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-95DFDYE2EX');
+    </script>
+    <style>
+        /* 基礎樣式 */
+        body {
+            margin: 0;
+            padding: 15px;
+            font-size: 1.2em;
+        }
 
-        <script src="days.js"></script>
+        h1 {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            margin: 0;
+            padding: 10px 0;
+        }
 
-    <style>
-        /* 樣式部分保持不變 */
-        body {
-            margin: 0;
-            padding: 15px;
-            font-size: 1.2em;
-        }
+        p {
+            margin: 8px 0;
+        }
 
-        h1 {
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5em;
-            margin: 0;
-            padding: 10px 0;
-        }
+        input[type=number].small-input {
+            width: 60px;
+            padding: 5px;
+            font-size: 1em;
+        }
 
-        p {
-            margin: 8px 0;
-        }
+        select {
+            font-size: 1em;
+        }
 
-        input[type=number].small-input {
-            width: 60px;
-            padding: 5px;
-            font-size: 1em;
-        }
+        /* 區塊基礎樣式 */
+        .section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0px;
+        }
 
-        select {
-            font-size: 1em;
-        }
+        /* 綠色區塊內容排版 */
+        .green-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
 
-        /* 區塊基礎樣式 */
-        .section-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0px;
-        }
+        .green-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-        /* 綠色區塊內容排版 */
-        .green-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
+        .green-section,
+        .red-section,
+        .blue-section,
+        .yellow-section,
+        .white-section {
+            padding: 5px;
+        }
 
-        .green-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .green-section {
+            background-color: #e6ffe6;
+            width: 100%;
+        }
 
-        .green-section,
-        .red-section,
-        .blue-section,
-        .yellow-section,
-        .white-section {
-            padding: 5px;
-        }
+        .red-section {
+            background-color: #ffe6e6;
+        }
 
-        .green-section {
-            background-color: #e6ffe6;
-            width: 100%;
-        }
+        .blue-section {
+            background-color: #e6f2ff;
+        }
 
-        .red-section {
-            background-color: #ffe6e6;
-        }
+        .yellow-section {
+            background-color: #fffff0;
+        }
 
-        .blue-section {
-            background-color: #e6f2ff;
-        }
+        .white-section {
+            background-color: #ffffff;
+        }
 
-        .yellow-section {
-            background-color: #fffff0;
-        }
+        /* 手機版樣式 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 0;
+            }
 
-        .white-section {
-            background-color: #ffffff;
-        }
+            .green-section,
+            .red-section,
+            .blue-section,
+            .yellow-section,
+            .white-section {
+                width: 100%;
+                box-sizing: border-box;
+            }
 
-        /* 手機版樣式 */
-        @media screen and (max-width: 768px) {
-            body {
-                padding: 0;
-            }
+            .section-container {
+                flex-direction: column;
+            }
 
-            .green-section,
-            .red-section,
-            .blue-section,
-            .yellow-section,
-            .white-section {
-                width: 100%;
-                box-sizing: border-box;
-            }
+            body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
+                font-size: 14px;
+            }
+        }
 
-            .section-container {
-                flex-direction: column;
-            }
+        /* 電腦版樣式 */
+        @media screen and (min-width: 769px) {
+            .flex-row {
+                display: flex;
+                gap: 0px;
+                width: 100%;
+            }
 
-            body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
-                font-size: 14px;
-            }
-        }
+            body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
+                font-size: 18px;
+            }
 
-        /* 電腦版樣式 */
-        @media screen and (min-width: 769px) {
-            .flex-row {
-                display: flex;
-                gap: 0px;
-                width: 100%;
-            }
+            .green-section {
+                font-size: 20px;
+            }
 
-            body, .green-section, .red-section, .blue-section, .yellow-section, .white-section {
-                font-size: 18px;
-            }
+            .red-section,
+            .blue-section,
+            .yellow-section,
+            .white-section {
+                width: 50%;
+            }
+        }
 
-            .green-section {
-                font-size: 20px;
-            }
+        /* 跑馬燈設定 */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
 
-            .red-section,
-            .blue-section,
-            .yellow-section,
-            .white-section {
-                width: 50%;
-            }
-        }
+        .marquee span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
 
-        /* 跑馬燈設定 */
-        .marquee {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
 
-        .marquee span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 30s linear infinite;
-        }
+        /* 新增的樣式：可收合區塊 */
+        .collapsible {
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 5px;
+        }
 
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
-        }
+        .content {
+            display: none; /* 預設隱藏 */
+            padding-left: 10px;
+        }
 
-        /* 新增的樣式：可收合區塊 */
-        .collapsible {
-            cursor: pointer;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 5px;
-        }
+        .collapsible::before {
+            content: '+';
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
 
-        .content {
-            display: none; /* 預設隱藏 */
-            padding-left: 10px;
-        }
-
-        .collapsible::before {
-            content: '+';
-            font-weight: bold;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        .collapsible.active::before {
-            content: '-';
-            transform: rotate(0deg);
-        }
-    </style>
+        .collapsible.active::before {
+            content: '-';
+            transform: rotate(0deg);
+        }
+    </style>
 </head>
 <body>
-    <div class="section-container">
-        <div class="green-section">
-            <h1>臺南市消防局外勤工時計算</h1>
-            <div class="marquee" id="marquee-container"><span>載入中...</span></div>
-            <div class="green-content">
-                <div class="green-item full-width">
-                    <label>班別：</label>
-                    <select id="classSelect" onchange="calculateClassDays(); saveClassSelection();">
-                        <option value="A">Ａ班</option>
-                        <option value="B">Ｂ班</option>
-                        <option value="C">Ｃ班</option>
-                        <option value="D">Ｄ班</option>
-                        <option value="E">Ｅ班</option>
-                        <option value="F">Ｆ班</option>
-                    </select>
-                    <a href="readme.html">說明</a>
-                </div>
+    <div class="section-container">
+        <div class="green-section">
+            <h1>臺南市消防局外勤工時計算</h1>
+            <div class="marquee" id="marquee-container"><span>載入中...</span></div>
+            <div class="green-content">
+                <div class="green-item full-width">
+                    <label>班別：</label>
+                    <select id="classSelect" onchange="calculateClassDays(); saveClassSelection();">
+                        <option value="A">Ａ班</option>
+                        <option value="B">Ｂ班</option>
+                        <option value="C">Ｃ班</option>
+                        <option value="D">Ｄ班</option>
+                        <option value="E">Ｅ班</option>
+                        <option value="F">Ｆ班</option>
+                    </select>
+                    <a href="readme.html">說明</a>
+                </div>
 
-                <div class="green-item">
-                    <label>時薪：</label>
-                    <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" oninput="updateAllMoneyDisplay(); saveHourMoney();">
-                </div>
-                <div class="green-item">
-                    <label>　　報滿加班費時數：</label>
-                    <span id="AllMoney"></span> 小時　
-                </div>
-                <div class="green-item">
-                    <label>月份：</label>
-                    <select id="yearSelect" onchange="calculateClassDays();">
-                        <option value="2025">114</option>
-                        <option value="2026">115</option>
-                    </select>
-                    年
-                    <select id="monthSelect" onchange="calculateClassDays();">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                    </select>
-                    月　
-                </div>
-                <div class="green-item">
-                    <label>基本工時：</label>
-                    <span id="BasicHour"></span>　
-                </div>
+                <div class="green-item">
+                    <label>時薪：</label>
+                    <input type="number" id="HourMoney" placeholder="時薪" class="small-input" min="0" step="1" oninput="updateAllMoneyDisplay(); saveHourMoney();">
+                </div>
+                <div class="green-item">
+                    <label>　　報滿加班費時數：</label>
+                    <span id="AllMoney"></span> 小時　
+                </div>
+                <div class="green-item">
+                    <label>月份：</label>
+                    <select id="yearSelect" onchange="calculateClassDays();">
+                        <option value="2025">114</option>
+                        <option value="2026">115</option>
+                    </select>
+                    年
+                    <select id="monthSelect" onchange="calculateClassDays();">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    月　
+                </div>
+                <div class="green-item">
+                    <label>基本工時：</label>
+                    <span id="BasicHour"></span>　
+                </div>
 
-                <div class="green-item">
-                    <label>本月工時：</label>
-                    <span id="WorkHour1"></span>　
-                </div>
-                <div class="green-item">
-                    <label>可領加班費</label>
-                    <span id="WorkMoney"></span>　
-                </div>
-                <div class="green-item">
-                    <label>累積工時：</label>
-                    <span id="WorkHour2"></span>
-                </div>
-            </div>
-        </div>
-        <div class="flex-row">
-            <div class="red-section">
-                <p>　　外勤加休：
-                    <input type="number" id="Leave1" placeholder="2" class="small-input" min="0" step="1" value="2" oninput="calculateTotalLeave();">
-                    　　　超勤補休：
-                    <input type="number" id="Leave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-                <p>　　　　休假：
-                    <input type="number" id="Leave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> (含婚、喪等假別)
-                </p>
-                <p>　上班改輪休：
-                    <input type="number" id="Leave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    　不扣時數外宿：
-                    <input type="number" id="Leave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-            </div>
-            <div class="blue-section">
-                <p>　　停休整日：
-                    <input type="number" id="Class1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    　　停休改外宿：
-                    <input type="number" id="Class2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-                <p>其他停休時數：
-                    <input type="number" id="Class3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> 小時(減少時數可輸入負數)
-                </p>
-            </div>
-        </div>
+                <div class="green-item">
+                    <label>本月工時：</label>
+                    <span id="WorkHour1"></span>　
+                </div>
+                <div class="green-item">
+                    <label>可領加班費</label>
+                    <span id="WorkMoney"></span>　
+                </div>
+                <div class="green-item">
+                    <label>累積工時：</label>
+                    <span id="WorkHour2"></span>
+                </div>
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="red-section">
+                <p>　　外勤加休：
+                    <input type="number" id="Leave1" placeholder="2" class="small-input" min="0" step="1" value="2" oninput="calculateTotalLeave();">
+                    　　　超勤補休：
+                    <input type="number" id="Leave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                </p>
+                <p>　　　　休假：
+                    <input type="number" id="Leave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> (含婚、喪等假別)
+                </p>
+                <p>　上班改輪休：
+                    <input type="number" id="Leave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    　不扣時數外宿：
+                    <input type="number" id="Leave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                </p>
+            </div>
+            <div class="blue-section">
+                <p>　　停休整日：
+                    <input type="number" id="Class1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    　　停休改外宿：
+                    <input type="number" id="Class2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                </p>
+                <p>其他停休時數：
+                    <input type="number" id="Class3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();"> 小時(減少時數可輸入負數)
+                </p>
+            </div>
+        </div>
 
-        <div class="flex-row">
-            <div class="yellow-section">
-                <div class="collapsible" onclick="toggleCollapsible('workLeaveContent', this)">公假(點擊展開)</div>
-                <div class="content" id="workLeaveContent">
-                    <p>
-                        公假１
-                        <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        公假２
-                        <input type="number" id="WorkLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WorkLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        公假３
-                        <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>．輸入起始和結束日期，1月5日輸入「5」即可。</p>
-                    <p>．公假計算方式請詳閱說明。</p>
-                </div>
-                <div class="collapsible" onclick="toggleCollapsible('weekendLeaveContent', this)">調整週休二日(點擊展開)</div>
-                <div class="content" id="weekendLeaveContent">
-                    <p>
-                        週休１
-                        <input type="number" id="WeekendLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WeekendLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        原上班天數：<span id="weekendWorkdays1">0</span>
-                        　需請假天數：<span id="weekendAbsenceDays1">0</span><span id="weekendStatus1"></span>
-                    </p>
-                    <p>
-                        週休２
-                        <input type="number" id="WeekendLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WeekendLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        原上班天數：<span id="weekendWorkdays2">0</span>
-                        　需請假天數：<span id="weekendAbsenceDays2">0</span><span id="weekendStatus2"></span>
-                    </p>
-                    <p>．請假超過七日應改為週休二日(依人事室規定)。</p>
-                    <p>．將日期區間變更為週一~周五上班，週六週日輪休。</p>
-                </div>
-            </div>
-            <div class="white-section">
-                <p>基礎工作日：<span id="WorkdaysCount"></span></p>
-                <p>國定假日：<span id="HolidayCount"></span>
-                    　補上班日：<span id="MakeupWorkCount"></span>
-                    　停班日：<span id="OffDaysCount"></span></p>
-                <p>原上班：<span id="ClassDays"></span>
-                    　實際上班：<span id="AllLeave"></span>
-                    　外宿：<span id="HalfLeave"></span></p>
-                <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
-                <div id="updates-container"></div>
-                <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
-                <p>☆若計算有誤，可來電告知，以便修正。</p>
-            </div>
-        </div>
-    </div>
+        <div class="flex-row">
+            <div class="yellow-section">
+                <div class="collapsible" onclick="toggleCollapsible('workLeaveContent', this)">公假(點擊展開)</div>
+                <div class="content" id="workLeaveContent">
+                    <p>
+                        公假１
+                        <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        公假２
+                        <input type="number" id="WorkLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        公假３
+                        <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>．輸入起始和結束日期，1月5日輸入「5」即可。</p>
+                    <p>．公假計算方式請詳閱說明。</p>
+                </div>
+                <div class="collapsible" onclick="toggleCollapsible('weekendLeaveContent', this)">調整週休二日(點擊展開)</div>
+                <div class="content" id="weekendLeaveContent">
+                    <p>
+                        週休１
+                        <input type="number" id="WeekendLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WeekendLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        原上班天數：<span id="weekendWorkdays1">0</span>
+                        　需請假天數：<span id="weekendAbsenceDays1">0</span><span id="weekendStatus1"></span>
+                    </p>
+                    <p>
+                        週休２
+                        <input type="number" id="WeekendLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WeekendLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        原上班天數：<span id="weekendWorkdays2">0</span>
+                        　需請假天數：<span id="weekendAbsenceDays2">0</span><span id="weekendStatus2"></span>
+                    </p>
+                    <p>．請假超過七日應改為週休二日(依人事室規定)。</p>
+                    <p>．將日期區間變更為週一~周五上班，週六週日輪休。</p>
+                </div>
+            </div>
+            <div class="white-section">
+                <p>基礎工作日：<span id="WorkdaysCount"></span></p>
+                <p>國定假日：<span id="HolidayCount"></span>
+                    　補上班日：<span id="MakeupWorkCount"></span>
+                    　停班日：<span id="OffDaysCount"></span></p>
+                <p>原上班：<span id="ClassDays"></span>
+                    　實際上班：<span id="AllLeave"></span>
+                    　外宿：<span id="HalfLeave"></span></p>
+                <p>　　　　　　　　※　復興分隊　莊伯瀚　製作　※</p>
+                <div id="updates-container"></div>
+                <p>☆本表僅供參考，實際數字以超勤報表為準。</p>
+                <p>☆若計算有誤，可來電告知，以便修正。</p>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        let holidays = [];
-        let makeupWorkDays = [];
-        let offDays = [];
-        let classDays = 0;
+    <script>
+        // 在頁面載入時自動加載之前儲存的數據
+        window.onload = function() {
+            const savedClass = localStorage.getItem('classSelect');
+            if (savedClass) {
+                document.getElementById('classSelect').value = savedClass;
+            }
 
-        // 新增的程式碼：處理物件和字串格式
-        const getDate = (item) => {
-            const dateStr = typeof item === 'object' ? item.date : item;
-            return new Date(dateStr).setHours(0, 0, 0, 0);
-        };
+            const savedHourMoney = localStorage.getItem('HourMoney');
+            if (savedHourMoney) {
+                document.getElementById('HourMoney').value = savedHourMoney;
+            }
 
-        // 直接從 days.js 裡的 daysData 物件中取得資料
-        holidays = daysData.holidays.map(getDate);
-        makeupWorkDays = daysData.makeupWorkDays.map(getDate);
-        offDays = daysData.offDays.map(getDate);
+            // 呼叫計算函式以更新顯示
+            initializeDefaultDate();
+            calculateClassDays();
+            updateAllMoneyDisplay();
+            calculateTotalLeave();
+        };
 
-        window.onload = function() {
-            const savedClass = localStorage.getItem('classSelect');
-            if (savedClass) {
-                document.getElementById('classSelect').value = savedClass;
-            }
-            const savedHourMoney = localStorage.getItem('HourMoney');
-            if (savedHourMoney) {
-                document.getElementById('HourMoney').value = savedHourMoney;
-            }
+        // 在選擇班別時儲存選擇的值
+        function saveClassSelection() {
+            const classSelect = document.getElementById('classSelect').value;
+            localStorage.setItem('classSelect', classSelect);
+        }
 
-            initializeDefaultDate();
-            calculateClassDays();
-            updateAllMoneyDisplay();
-            calculateTotalLeave();
-            updateClassOptions();
-            fetchAndDisplayUpdates();
-        };
+        // 在輸入時薪時儲存輸入的值
+        function saveHourMoney() {
+            const hourMoney = document.getElementById('HourMoney').value;
+            localStorage.setItem('HourMoney', hourMoney);
+        }
 
-        // 以下的函式保持不變
-        function saveClassSelection() {
-            const classSelect = document.getElementById('classSelect').value;
-            localStorage.setItem('classSelect', classSelect);
-        }
+        /**
+         * 取得從2025-01-01開始的天數偏移量
+         */
+        function getDayOffset(date) {
+            const startDate = new Date('2025-01-01');
+            const msPerDay = 1000 * 60 * 60 * 24;
+            return Math.floor((date.getTime() - startDate.getTime()) / msPerDay);
+        }
 
-        function saveHourMoney() {
-            const hourMoney = document.getElementById('HourMoney').value;
-            localStorage.setItem('HourMoney', hourMoney);
-        }
+        function updateClassOptions() {
+            const today = new Date();
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            const formattedDate = `今日(${month}/${day})`;
 
-        function getDayOffset(date) {
-            const startDate = new Date('2025-01-01');
-            const msPerDay = 1000 * 60 * 60 * 24;
-            return Math.floor((date.getTime() - startDate.getTime()) / msPerDay);
-        }
+            const dayOffset4 = getDayOffset(today) % 4;
+            const dayOffset2 = getDayOffset(today) % 2;
 
-        function updateClassOptions() {
-            const today = new Date();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            const formattedDate = `今日(${month}/${day})`;
+            const workShifts4 = {
+                A: [3],
+                B: [1],
+                C: [0],
+                D: [2],
+            };
 
-            const dayOffset4 = getDayOffset(today) % 4;
-            const dayOffset2 = getDayOffset(today) % 2;
+            const workShifts2 = {
+                E: [0],
+                F: [1]
+            };
 
-            const workShifts4 = {
-                A: [3],
-                B: [1],
-                C: [0],
-                D: [2]
-            };
+            const classSelect = document.getElementById('classSelect');
+            for (let option of classSelect.options) {
+                const classType = option.value;
+                if (['A', 'B', 'C', 'D'].includes(classType)) {
+                    if (workShifts4[classType].includes(dayOffset4)) {
+                        option.textContent = `${classType}班，${formattedDate}上班第1天`;
+                    } else if (workShifts4[classType].includes((dayOffset4 + 3) % 4)) {
+                        option.textContent = `${classType}班，${formattedDate}上班第2天`;
+                    } else if (workShifts4[classType].includes((dayOffset4 + 2) % 4)) {
+                        option.textContent = `${classType}班，${formattedDate}輪休第1天`;
+                    } else if (workShifts4[classType].includes((dayOffset4 + 1) % 4)) {
+                        option.textContent = `${classType}班，${formattedDate}輪休第2天`;
+                    } else {
+                        option.textContent = `${classType}班`;
+                    }
+                } else if (['E', 'F'].includes(classType)) {
+                    if (workShifts2[classType].includes(dayOffset2)) {
+                        option.textContent = `${classType}班，${formattedDate}上班`;
+                    } else {
+                        option.textContent = `${classType}班，${formattedDate}輪休`;
+                    }
+                } else {
+                    option.textContent = `${classType}班`;
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateClassOptions);
+    // 定義國定假日、補上班日和停班日
+    const holidays = [
+        new Date('2025-01-01').setHours(0, 0, 0, 0), // 新年
+        new Date('2025-01-27').setHours(0, 0, 0, 0), // 春節
+        new Date('2025-01-28').setHours(0, 0, 0, 0), // 春節
+        new Date('2025-01-29').setHours(0, 0, 0, 0), // 春節
+        new Date('2025-01-30').setHours(0, 0, 0, 0), // 春節
+        new Date('2025-01-31').setHours(0, 0, 0, 0), // 春節
+        new Date('2025-02-28').setHours(0, 0, 0, 0), // 和平紀念日
+        new Date('2025-04-03').setHours(0, 0, 0, 0), // 清明節補假
+        new Date('2025-04-04').setHours(0, 0, 0, 0), // 兒童節
+        new Date('2025-05-30').setHours(0, 0, 0, 0), // 端午節補假
+        new Date('2025-09-29').setHours(0, 0, 0, 0), // 教師節補假
+        new Date('2025-10-06').setHours(0, 0, 0, 0), // 中秋節
+        new Date('2025-10-10').setHours(0, 0, 0, 0), // 國慶日
+        new Date('2025-10-24').setHours(0, 0, 0, 0), // 光復節補假
+        new Date('2025-12-25').setHours(0, 0, 0, 0), // 行憲紀念日
+        new Date('2026-01-01').setHours(0, 0, 0, 0), // 新年
+        new Date('2026-01-19').setHours(0, 0, 0, 0), // 消防節
+        new Date('2026-02-16').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-17').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-18').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-19').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-20').setHours(0, 0, 0, 0), // 春節
+        new Date('2026-02-27').setHours(0, 0, 0, 0), // 和平紀念日補假
+        new Date('2026-04-03').setHours(0, 0, 0, 0), // 兒童節補假
+        new Date('2026-04-06').setHours(0, 0, 0, 0), // 清明節補假
+        new Date('2026-05-01').setHours(0, 0, 0, 0), // 勞動節
+        new Date('2026-06-19').setHours(0, 0, 0, 0), // 端午節補假
+        new Date('2026-09-25').setHours(0, 0, 0, 0), // 中秋節
+        new Date('2026-09-28').setHours(0, 0, 0, 0), // 教師節
+        new Date('2026-10-09').setHours(0, 0, 0, 0), // 國慶日補假
+        new Date('2026-10-26').setHours(0, 0, 0, 0), // 光復節補假
+        new Date('2026-12-25').setHours(0, 0, 0, 0), // 行憲紀念日
+        // 更多國定假日...
+    ];
 
-            const workShifts2 = {
-                E: [0],
-                F: [1]
-            };
+    const makeupWorkDays = [
+        new Date('2025-02-08').setHours(0, 0, 0, 0), // 補春節
+        // 更多補班日...
+    ];
 
-            const classSelect = document.getElementById('classSelect');
-            for (let option of classSelect.options) {
-                const classType = option.value;
-                if (['A', 'B', 'C', 'D'].includes(classType)) {
-                    if (workShifts4[classType].includes(dayOffset4)) {
-                        option.textContent = `${classType}班，${formattedDate}上班第1天`;
-                    } else if (workShifts4[classType].includes((dayOffset4 + 3) % 4)) {
-                        option.textContent = `${classType}班，${formattedDate}上班第2天`;
-                    } else if (workShifts4[classType].includes((dayOffset4 + 2) % 4)) {
-                        option.textContent = `${classType}班，${formattedDate}輪休第1天`;
-                    } else if (workShifts4[classType].includes((dayOffset4 + 1) % 4)) {
-                        option.textContent = `${classType}班，${formattedDate}輪休第2天`;
-                    } else {
-                        option.textContent = `${classType}班`;
-                    }
-                } else if (['E', 'F'].includes(classType)) {
-                    if (workShifts2[classType].includes(dayOffset2)) {
-                        option.textContent = `${classType}班，${formattedDate}上班`;
-                    } else {
-                        option.textContent = `${classType}班，${formattedDate}輪休`;
-                    }
-                } else {
-                    option.textContent = `${classType}班`;
-                }
-            }
-        }
-        
-        function isClassDay(date, selectedClass) {
-            const daysSinceStart = getDayOffset(date);
-            const classMapping4 = {
-                A: [2, 3],
-                B: [0, 1],
-                C: [3, 0],
-                D: [1, 2]
-            };
-            const classMapping2 = {
-                E: [0],
-                F: [1]
-            };
+    const offDays = [
+        new Date('2024-10-31').setHours(0, 0, 0, 0), // 颱風
+        new Date('2025-07-07').setHours(0, 0, 0, 0), // 丹娜絲颱風停班
+        new Date('2025-07-29').setHours(0, 0, 0, 0), // 西南氣流下雨停班
+        new Date('2025-08-13').setHours(0, 0, 0, 0), // 楊柳颱風停班
+        // 更多停班日...
+    ];
+        let classDays = 0;
 
-            if (classMapping4[selectedClass]) {
-                return classMapping4[selectedClass].includes(daysSinceStart % 4);
-            } else if (classMapping2[selectedClass]) {
-                return classMapping2[selectedClass].includes(daysSinceStart % 2);
-            }
-            return false;
-        }
+        /**
+         * 判斷指定班別在特定日期是否為上班日。
+         * @param {Date} date 欲判斷的日期。
+         * @param {string} selectedClass 使用者選擇的班別 (A-F)。
+         * @returns {boolean} 是否為上班日。
+         */
+        function isClassDay(date, selectedClass) {
+            const daysSinceStart = getDayOffset(date);
+            const classMapping4 = {
+                A: [2, 3],
+                B: [0, 1],
+                C: [3, 0],
+                D: [1, 2]
+            };
+            const classMapping2 = {
+                E: [0],
+                F: [1]
+            };
 
-        function getDaysInRange(startDate, endDate) {
-            if (!startDate || !endDate || startDate > endDate) {
-                return { workdays: 0, classDays: 0, absenceDays: 0 };
-            }
+            if (classMapping4[selectedClass]) {
+                return classMapping4[selectedClass].includes(daysSinceStart % 4);
+            } else if (classMapping2[selectedClass]) {
+                return classMapping2[selectedClass].includes(daysSinceStart % 2);
+            }
+            return false;
+        }
 
-            let workdays = 0;
-            let classDaysCount = 0;
-            let absenceDaysCount = 0;
-            const selectedClass = document.getElementById("classSelect").value;
-            const dateWithoutTime = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+        /**
+         * 計算指定日期範圍內的上班日數。
+         * @param {Date} startDate 開始日期。
+         * @param {Date} endDate 結束日期。
+         * @returns {{workdays: number, classDays: number, absenceDays: number}}
+         */
+        function getDaysInRange(startDate, endDate) {
+            if (!startDate || !endDate || startDate > endDate) {
+                return { workdays: 0, classDays: 0, absenceDays: 0 };
+            }
 
-            let currentDay = new Date(startDate);
-            while (currentDay <= endDate) {
-                const dateTimestamp = dateWithoutTime(currentDay);
-                const dayOfWeek = currentDay.getDay();
+            let workdays = 0;
+            let classDaysCount = 0;
+            let absenceDaysCount = 0;
+            const selectedClass = document.getElementById("classSelect").value;
+            const dateWithoutTime = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
-                if ((dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateTimestamp)) ||
-                    makeupWorkDays.includes(dateTimestamp)) {
-                    workdays++;
-                }
+            let currentDay = new Date(startDate);
+            while (currentDay <= endDate) {
+                const dateTimestamp = dateWithoutTime(currentDay).getTime();
+                const dayOfWeek = currentDay.getDay();
 
-                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-                    absenceDaysCount++;
-                }
+                // 計算基礎工作日數 (週一到週五，不含假日，加上補上班日)
+                if ((dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateTimestamp)) ||
+                    makeupWorkDays.includes(dateTimestamp)) {
+                    workdays++;
+                }
 
-                if (isClassDay(currentDay, selectedClass)) {
-                    classDaysCount++;
-                }
+                // 計算需要請假的天數 (週一到週五，不含假日和停班日)
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                     absenceDaysCount++;
+                }
 
-                currentDay.setDate(currentDay.getDate() + 1);
-            }
-            return { workdays, classDays: classDaysCount, absenceDays: absenceDaysCount };
-        }
+                // 計算輪值上班日數
+                if (isClassDay(currentDay, selectedClass)) {
+                    classDaysCount++;
+                }
 
-        function calculateWorkdaysInWeekendRange() {
-            const year = parseInt(document.getElementById("yearSelect").value);
-            const month = parseInt(document.getElementById("monthSelect").value) - 1;
+                currentDay.setDate(currentDay.getDate() + 1);
+            }
+            return { workdays, classDays: classDaysCount, absenceDays: absenceDaysCount };
+        }
 
-            // 週休1
-            const startDay1 = parseInt(document.getElementById("WeekendLeave1").value);
-            const endDay1 = parseInt(document.getElementById("WeekendLeave2").value);
-            const weekendWorkdaysElement1 = document.getElementById("weekendWorkdays1");
-            const weekendAbsenceDaysElement1 = document.getElementById("weekendAbsenceDays1");
+        function calculateWorkdaysInWeekendRange() {
+            const year = parseInt(document.getElementById("yearSelect").value);
+            const month = parseInt(document.getElementById("monthSelect").value) - 1;
 
-            if (startDay1 && endDay1) {
-                const startDate = new Date(year, month, startDay1);
-                const endDate = new Date(year, month, endDay1);
-                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
-                weekendWorkdaysElement1.textContent = classDays;
-                weekendAbsenceDaysElement1.textContent = absenceDays;
-            } else {
-                weekendWorkdaysElement1.textContent = 0;
-                weekendAbsenceDaysElement1.textContent = 0;
-            }
+            // 週休1
+            const startDay1 = parseInt(document.getElementById("WeekendLeave1").value);
+            const endDay1 = parseInt(document.getElementById("WeekendLeave2").value);
+            const weekendWorkdaysElement1 = document.getElementById("weekendWorkdays1");
+            const weekendAbsenceDaysElement1 = document.getElementById("weekendAbsenceDays1");
 
-            // 週休2
-            const startDay2 = parseInt(document.getElementById("WeekendLeave3").value);
-            const endDay2 = parseInt(document.getElementById("WeekendLeave4").value);
-            const weekendWorkdaysElement2 = document.getElementById("weekendWorkdays2");
-            const weekendAbsenceDaysElement2 = document.getElementById("weekendAbsenceDays2");
+            if (startDay1 && endDay1) {
+                const startDate = new Date(year, month, startDay1);
+                const endDate = new Date(year, month, endDay1);
+                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
+                weekendWorkdaysElement1.textContent = classDays;
+                weekendAbsenceDaysElement1.textContent = absenceDays;
+            } else {
+                weekendWorkdaysElement1.textContent = 0;
+                weekendAbsenceDaysElement1.textContent = 0;
+            }
 
-            if (startDay2 && endDay2) {
-                const startDate = new Date(year, month, startDay2);
-                const endDate = new Date(year, month, endDay2);
-                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
-                weekendWorkdaysElement2.textContent = classDays;
-                weekendAbsenceDaysElement2.textContent = absenceDays;
-            } else {
-                weekendWorkdaysElement2.textContent = 0;
-                weekendAbsenceDaysElement2.textContent = 0;
-            }
-        }
+            // 週休2
+            const startDay2 = parseInt(document.getElementById("WeekendLeave3").value);
+            const endDay2 = parseInt(document.getElementById("WeekendLeave4").value);
+            const weekendWorkdaysElement2 = document.getElementById("weekendWorkdays2");
+            const weekendAbsenceDaysElement2 = document.getElementById("weekendAbsenceDays2");
 
-        function calculateLeaveData() {
-            const year = parseInt(document.getElementById("yearSelect").value);
-            const month = parseInt(document.getElementById("monthSelect").value) - 1;
-            let totalWorkdays = 0;
-            let totalClassDays = 0;
+            if (startDay2 && endDay2) {
+                const startDate = new Date(year, month, startDay2);
+                const endDate = new Date(year, month, endDay2);
+                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
+                weekendWorkdaysElement2.textContent = classDays;
+                weekendAbsenceDaysElement2.textContent = absenceDays;
+            } else {
+                weekendWorkdaysElement2.textContent = 0;
+                weekendAbsenceDaysElement2.textContent = 0;
+            }
+        }
 
-            const workLeaveIds = ['WorkLeave1', 'WorkLeave2', 'WorkLeave3', 'WorkLeave4', 'WorkLeave5', 'WorkLeave6'];
-            for (let i = 0; i < workLeaveIds.length; i += 2) {
-                const startDay = parseInt(document.getElementById(workLeaveIds[i]).value);
-                const endDay = parseInt(document.getElementById(workLeaveIds[i + 1]).value);
+        function calculateLeaveData() {
+            const year = parseInt(document.getElementById("yearSelect").value);
+            const month = parseInt(document.getElementById("monthSelect").value) - 1;
+            let totalWorkdays = 0;
+            let totalClassDays = 0;
 
-                if (startDay && endDay) {
-                    const startDate = new Date(year, month, startDay);
-                    const endDate = new Date(year, month, endDay);
-                    const { workdays, classDays } = getDaysInRange(startDate, endDate);
-                    totalWorkdays += workdays;
-                    totalClassDays += classDays;
-                }
-            }
+            // 只計算公假
+            const workLeaveIds = ['WorkLeave1', 'WorkLeave2', 'WorkLeave3', 'WorkLeave4', 'WorkLeave5', 'WorkLeave6'];
+            for (let i = 0; i < workLeaveIds.length; i += 2) {
+                const startDay = parseInt(document.getElementById(workLeaveIds[i]).value);
+                const endDay = parseInt(document.getElementById(workLeaveIds[i + 1]).value);
 
-            return { totalWorkdays, totalClassDays };
-        }
+                if (startDay && endDay) {
+                    const startDate = new Date(year, month, startDay);
+                    const endDate = new Date(year, month, endDay);
+                    const { workdays, classDays } = getDaysInRange(startDate, endDate);
+                    totalWorkdays += workdays;
+                    totalClassDays += classDays;
+                }
+            }
 
-        function calculateClassDays() {
-            const year = parseInt(document.getElementById("yearSelect").value);
-            const month = parseInt(document.getElementById("monthSelect").value) - 1;
-            const selectedClass = document.getElementById("classSelect").value;
+            return { totalWorkdays, totalClassDays };
+        }
 
-            if (year && month >= 0 && selectedClass) {
-                const startDate = new Date(year, month, 1);
-                const endDate = new Date(year, month + 1, 0);
-                const msPerDay = 1000 * 60 * 60 * 24;
+        function calculateClassDays() {
+            const year = parseInt(document.getElementById("yearSelect").value);
+            const month = parseInt(document.getElementById("monthSelect").value) - 1;
+            const selectedClass = document.getElementById("classSelect").value;
 
-                classDays = 0;
-                let weekdaysCount = 0;
-                let holidayCount = 0;
-                let makeupWorkCount = 0;
-                let offDaysCount = 0;
-                const dateWithoutTime = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+            if (year && month >= 0 && selectedClass) {
+                const startDate = new Date(year, month, 1);
+                const endDate = new Date(year, month + 1, 0);
+                const msPerDay = 1000 * 60 * 60 * 24;
 
-                for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-                    const dayOfWeek = date.getDay();
-                    const dateTimestamp = dateWithoutTime(date);
+                classDays = 0;
+                let weekdaysCount = 0;
+                let holidayCount = 0;
+                let makeupWorkCount = 0;
+                let offDaysCount = 0;
 
-                    if (dayOfWeek >= 1 && dayOfWeek <= 5) weekdaysCount++;
-                    if (holidays.includes(dateTimestamp)) holidayCount++;
-                    if (makeupWorkDays.includes(dateTimestamp)) makeupWorkCount++;
-                    if (offDays.includes(dateTimestamp)) offDaysCount++;
+                for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+                    const dayOfWeek = date.getDay();
+                    const dateWithoutTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 
-                    if (isClassDay(date, selectedClass)) {
-                        classDays++;
-                    }
-                }
+                    if (dayOfWeek >= 1 && dayOfWeek <= 5) weekdaysCount++;
+                    if (holidays.includes(dateWithoutTime)) holidayCount++;
+                    if (makeupWorkDays.includes(dateWithoutTime)) makeupWorkCount++;
+                    if (offDays.includes(dateWithoutTime)) offDaysCount++;
 
-                document.getElementById("ClassDays").textContent = classDays;
-                document.getElementById("WorkdaysCount").textContent = ` ${weekdaysCount} `;
-                document.getElementById("HolidayCount").textContent = ` ${holidayCount} `;
-                document.getElementById("MakeupWorkCount").textContent = ` ${makeupWorkCount} `;
-                document.getElementById("OffDaysCount").textContent = ` ${offDaysCount} `;
+                    if (isClassDay(date, selectedClass)) {
+                        classDays++;
+                    }
+                }
 
-                const basicHour = (weekdaysCount - holidayCount + makeupWorkCount - offDaysCount) * 8;
-                document.getElementById("BasicHour").textContent = basicHour;
+                document.getElementById("ClassDays").textContent = classDays;
+                document.getElementById("WorkdaysCount").textContent = ` ${weekdaysCount} `;
+                document.getElementById("HolidayCount").textContent = ` ${holidayCount} `;
+                document.getElementById("MakeupWorkCount").textContent = ` ${makeupWorkCount} `;
+                document.getElementById("OffDaysCount").textContent = ` ${offDaysCount} `;
 
-                calculateTotalLeave();
-            }
-        }
+                const basicHour = (weekdaysCount - holidayCount + makeupWorkCount - offDaysCount) * 8;
+                document.getElementById("BasicHour").textContent = basicHour;
 
-        function updateAllMoneyDisplay() {
-            const hourMoney = parseInt(document.getElementById("HourMoney").value) || 0;
-            const allMoney = hourMoney > 0 ? Math.ceil(19000 / hourMoney) : 0;
-            document.getElementById("AllMoney").textContent = allMoney;
-            calculateTotalLeave();
-        }
+                calculateTotalLeave();
+            }
+        }
 
-        function calculateTotalLeave() {
-            const inputs = ['Leave1', 'Leave2', 'Leave3', 'Leave4', 'Leave5', 'Class1', 'Class2', 'Class3'];
-            const [leave1, leave2, leave3, leave4, leave5, class1, class2, class3] = inputs.map(id => {
-                const value = document.getElementById(id).value;
-                return value === "" ? 0 : parseInt(value);
-            });
+        function updateAllMoneyDisplay() {
+            const hourMoney = parseInt(document.getElementById("HourMoney").value) || 0;
+            const allMoney = hourMoney > 0 ? Math.ceil(19000 / hourMoney) : 0;
+            document.getElementById("AllMoney").textContent = allMoney;
+            calculateTotalLeave();
+        }
 
-            const actualLeave1 = document.getElementById("Leave1").value === "" ? 2 : leave1;
-            const totalLeave = actualLeave1 + leave2 + leave3 + leave4;
-            calculateWorkdaysInWeekendRange();
+        function calculateTotalLeave() {
+            // 讀取各種假別和停休天數
+            const inputs = ['Leave1', 'Leave2', 'Leave3', 'Leave4', 'Leave5', 'Class1', 'Class2', 'Class3'];
+            const [leave1, leave2, leave3, leave4, leave5, class1, class2, class3] = inputs.map(id => {
+                const value = document.getElementById(id).value;
+                return value === "" ? 0 : parseInt(value);
+            });
 
-            const weekendWorkdays1 = parseInt(document.getElementById("weekendWorkdays1").textContent) || 0;
-            const weekendAbsenceDays1 = parseInt(document.getElementById("weekendAbsenceDays1").textContent) || 0;
-            const weekendWorkdays2 = parseInt(document.getElementById("weekendWorkdays2").textContent) || 0;
-            const weekendAbsenceDays2 = parseInt(document.getElementById("weekendAbsenceDays2").textContent) || 0;
-            
-            const weekendLeaveDifference = (weekendAbsenceDays1 - weekendWorkdays1) + (weekendAbsenceDays2 - weekendWorkdays2);
+            const actualLeave1 = document.getElementById("Leave1").value === "" ? 2 : leave1;
+            const totalLeave = actualLeave1 + leave2 + leave3 + leave4;
 
-            const { totalWorkdays, totalClassDays } = calculateLeaveData();
-            
-            const actualWorkDays = classDays - actualLeave1 - leave2 - leave3 - leave4 - leave5 + class1 - totalClassDays + weekendLeaveDifference;
-            const halfLeave = leave5 + class2;
+            // 確保週休二日天數已經被計算並顯示在畫面上
+            calculateWorkdaysInWeekendRange();
 
-            const weekendStatus1 = document.getElementById('weekendStatus1');
-            if (totalLeave < weekendAbsenceDays1) {
-                weekendStatus1.textContent = '　(請假天數不足)';
-                weekendStatus1.style.color = 'red';
-            } else {
-                weekendStatus1.textContent = '　(OK)';
-                weekendStatus1.style.color = 'black';
-            }
+            // 讀取週休二日的計算結果
+            const weekendWorkdays1 = parseInt(document.getElementById("weekendWorkdays1").textContent) || 0;
+            const weekendAbsenceDays1 = parseInt(document.getElementById("weekendAbsenceDays1").textContent) || 0;
+            const weekendWorkdays2 = parseInt(document.getElementById("weekendWorkdays2").textContent) || 0;
+            const weekendAbsenceDays2 = parseInt(document.getElementById("weekendAbsenceDays2").textContent) || 0;
+            
+            // 計算週休二日的須請假天數和原上班天數的差值
+            const weekendLeaveDifference = (weekendAbsenceDays1 - weekendWorkdays1) + (weekendAbsenceDays2 - weekendWorkdays2);
 
-            const totalWeekendAbsenceDays = weekendAbsenceDays1 + weekendAbsenceDays2;
-            const weekendStatus2 = document.getElementById('weekendStatus2');
-            if (totalLeave < totalWeekendAbsenceDays) {
-                weekendStatus2.textContent = '　(請假天數不足)';
-                weekendStatus2.style.color = 'red';
-            } else {
-                weekendStatus2.textContent = '　(OK)';
-                weekendStatus2.style.color = 'black';
-            }
+            // 計算公假和週休二日
+            const { totalWorkdays, totalClassDays } = calculateLeaveData();
+            
+            const actualWorkDays = classDays - actualLeave1 - leave2 - leave3 - leave4 - leave5 + class1 - totalClassDays + weekendLeaveDifference;
+            const halfLeave = leave5 + class2;
 
-            document.getElementById("AllLeave").textContent = actualWorkDays;
-            document.getElementById("HalfLeave").textContent = halfLeave;
+            // 新增的檢查邏輯
+            const weekendStatus1 = document.getElementById('weekendStatus1');
+            if (totalLeave < weekendAbsenceDays1) {
+                weekendStatus1.textContent = '　(請假天數不足)';
+                weekendStatus1.style.color = 'red';
+            } else {
+                weekendStatus1.textContent = '　(OK)';
+                weekendStatus1.style.color = 'black';
+            }
 
-            const basicHour = parseInt(document.getElementById("BasicHour").textContent) || 0;
-            const workHour1 = (actualWorkDays * 21) + (halfLeave * 10) + (leave2 * 12) + (leave3 * 8) + class3 + (totalWorkdays * 8);
-            
-            document.getElementById("WorkHour1").textContent = workHour1;
+            const totalWeekendAbsenceDays = weekendAbsenceDays1 + weekendAbsenceDays2;
+            const weekendStatus2 = document.getElementById('weekendStatus2');
+            if (totalLeave < totalWeekendAbsenceDays) {
+                weekendStatus2.textContent = '　(請假天數不足)';
+                weekendStatus2.style.color = 'red';
+            } else {
+                weekendStatus2.textContent = '　(OK)';
+                weekendStatus2.style.color = 'black';
+            }
 
-            const hourMoney = parseInt(document.getElementById("HourMoney").value) || 0;
-            const allMoney = parseInt(document.getElementById("AllMoney").textContent) || 0;
-            
-            let workMoney = (workHour1 - basicHour) * hourMoney;
+            document.getElementById("AllLeave").textContent = actualWorkDays;
+            document.getElementById("HalfLeave").textContent = halfLeave;
 
-            if (workMoney < 0) {
-                workMoney = 0;
-            } else if (workMoney > 19000) {
-                workMoney = 19000;
-            }
+            const basicHour = parseInt(document.getElementById("BasicHour").textContent) || 0;
+            const workHour1 = (actualWorkDays * 21) + (halfLeave * 10) + (leave2 * 12) + (leave3 * 8) + class3 + (totalWorkdays * 8);
+            
+            document.getElementById("WorkHour1").textContent = workHour1;
 
-            const workMoneyElement = document.getElementById("WorkMoney");
-            workMoneyElement.textContent = workMoney;
-            workMoneyElement.style.color = workMoney < 19000 ? "red" : "black";
+            const hourMoney = parseInt(document.getElementById("HourMoney").value) || 0;
+            const allMoney = parseInt(document.getElementById("AllMoney").textContent) || 0;
+            
+            let workMoney = (workHour1 - basicHour) * hourMoney;
 
-            const workHour2 = Math.max(workHour1 - basicHour - allMoney, 0);
-            document.getElementById("WorkHour2").textContent = workHour2;
-        }
+            if (workMoney < 0) {
+                workMoney = 0;
+            } else if (workMoney > 19000) {
+                workMoney = 19000;
+            }
 
-        document.getElementById("HourMoney").addEventListener("input", updateAllMoneyDisplay);
+            const workMoneyElement = document.getElementById("WorkMoney");
+            workMoneyElement.textContent = workMoney;
+            workMoneyElement.style.color = workMoney < 19000 ? "red" : "black";
 
-        function initializeDefaultDate() {
-            const today = new Date();
-            let targetYear = today.getFullYear();
-            let targetMonth = today.getMonth() + 1;
+            const workHour2 = Math.max(workHour1 - basicHour - allMoney, 0);
+            document.getElementById("WorkHour2").textContent = workHour2;
+        }
 
-            if (today.getDate() > 10) {
-                targetMonth += 1;
-                if (targetMonth > 12) {
-                    targetMonth = 1;
-                    targetYear += 1;
-                }
-            }
+        document.getElementById("HourMoney").addEventListener("input", updateAllMoneyDisplay);
 
-            const yearSelect = document.getElementById('yearSelect');
-            const monthSelect = document.getElementById('monthSelect');
-            if (yearSelect && monthSelect) {
-                yearSelect.value = targetYear.toString();
-                monthSelect.value = targetMonth.toString();
-            }
-        }
+        function initializeDefaultDate() {
+            const today = new Date();
+            let targetYear = today.getFullYear();
+            let targetMonth = today.getMonth() + 1;
 
-        const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
-        const updatesContainer = document.getElementById('updates-container');
-        const marqueeContainer = document.getElementById('marquee-container');
+            if (today.getDate() > 10) {
+                targetMonth += 1;
+                if (targetMonth > 12) {
+                    targetMonth = 1;
+                    targetYear += 1;
+                }
+            }
 
-        async function fetchAndDisplayUpdates() {
-            try {
-                const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                }
-                const text = await response.text();
-                const lines = text.split('\n');
-                const recentUpdates = lines.slice(0, 3).filter(line => line.trim() !== '');
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            if (yearSelect && monthSelect) {
+                yearSelect.value = targetYear.toString();
+                monthSelect.value = targetMonth.toString();
+            }
 
-                if (recentUpdates.length > 0) {
-                    const updatesText = recentUpdates.join(' | ');
-                    marqueeContainer.innerHTML = `<span>${updatesText}</span>`;
+            calculateClassDays();
+            calculateTotalLeave();
+        }
 
-                    updatesContainer.innerHTML = '';
-                    const ul = document.createElement('ul');
-                    recentUpdates.forEach(update => {
-                        const li = document.createElement('li');
-                        li.textContent = update;
-                        ul.appendChild(li);
-                    });
-                    updatesContainer.appendChild(ul);
-                } else {
-                    const noUpdatesMessage = '目前沒有更新紀錄。';
-                    updatesContainer.textContent = noUpdatesMessage;
-                    marqueeContainer.innerHTML = `<span>${noUpdatesMessage}</span>`;
-                }
-            } catch (error) {
-                console.error('抓取更新資料時發生錯誤:', error);
-                const errorMessage = '無法載入更新紀錄。';
-                updatesContainer.textContent = errorMessage;
-                marqueeContainer.innerHTML = `<span>${errorMessage}</span>`;
-            }
-        }
-        
-        function toggleCollapsible(contentId, header) {
-            const content = document.getElementById(contentId);
-            header.classList.toggle('active');
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                content.style.display = "block";
-            }
-        }
-    </script>
+        const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
+        const updatesContainer = document.getElementById('updates-container');
+        const marqueeContainer = document.getElementById('marquee-container');
+
+        async function fetchAndDisplayUpdates() {
+            try {
+                const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+                }
+                const text = await response.text();
+                const lines = text.split('\n');
+                const recentUpdates = lines.slice(0, 3).filter(line => line.trim() !== '');
+
+                if (recentUpdates.length > 0) {
+                    const updatesText = recentUpdates.join(' | ');
+                    marqueeContainer.innerHTML = `<span>${updatesText}</span>`;
+
+                    updatesContainer.innerHTML = '';
+                    const ul = document.createElement('ul');
+                    recentUpdates.forEach(update => {
+                        const li = document.createElement('li');
+                        li.textContent = update;
+                        ul.appendChild(li);
+                    });
+                    updatesContainer.appendChild(ul);
+                } else {
+                    const noUpdatesMessage = '目前沒有更新紀錄。';
+                    updatesContainer.textContent = noUpdatesMessage;
+                    marqueeContainer.innerHTML = `<span>${noUpdatesMessage}</span>`;
+                }
+            } catch (error) {
+                console.error('抓取更新資料時發生錯誤:', error);
+                const errorMessage = '無法載入更新紀錄。';
+                updatesContainer.textContent = errorMessage;
+                marqueeContainer.innerHTML = `<span>${errorMessage}</span>`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDefaultDate();
+            fetchAndDisplayUpdates();
+        });
+
+        // 新增的JavaScript函式：用於切換可收合區塊的顯示狀態
+        function toggleCollapsible(contentId, header) {
+            const content = document.getElementById(contentId);
+            header.classList.toggle('active');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
