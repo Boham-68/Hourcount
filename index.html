@@ -159,6 +159,33 @@
             from { transform: translateX(0); }
             to { transform: translateX(-100%); }
         }
+
+        /* 新增的樣式：可收合區塊 */
+        .collapsible {
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 5px;
+        }
+
+        .content {
+            display: none; /* 預設隱藏 */
+            padding-left: 10px;
+        }
+
+        .collapsible::before {
+            content: '+';
+            font-weight: bold;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active::before {
+            content: '-';
+            transform: rotate(0deg);
+        }
     </style>
 </head>
 <body>
@@ -260,20 +287,26 @@
 
         <div class="flex-row">
             <div class="yellow-section">
-                <p>　　　　公假１
-                    <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                    <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-                <p>　　　　公假２
-                    <input type="number" id="WorkLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                    <input type="number" id="WorkLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-                <p>　　　　公假３
-                    <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                    <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                </p>
-                <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
-                <p>公假計算方式請詳閱說明。</p>
+                <div class="collapsible" onclick="toggleCollapsible()">公假</div>
+                <div class="content" id="workLeaveContent">
+                    <p>
+                        公假１
+                        <input type="number" id="WorkLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        公假２
+                        <input type="number" id="WorkLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>
+                        公假３
+                        <input type="number" id="WorkLeave5" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
+                        <input type="number" id="WorkLeave6" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
+                    </p>
+                    <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
+                    <p>公假計算方式請詳閱說明。</p>
+                </div>
             </div>
             <div class="white-section">
                 <p>基礎工作日：<span id="WorkdaysCount"></span></p>
@@ -494,7 +527,6 @@
                 return value === "" ? 0 : parseInt(value);
             });
 
-            // 確保 Leave1 預設值為 2
             const actualLeave1 = document.getElementById("Leave1").value === "" ? 2 : leave1;
 
             const { totalWorkdays, totalClassDays } = calculateLeaveData();
@@ -596,6 +628,18 @@
             initializeDefaultDate();
             fetchAndDisplayUpdates();
         });
+
+        // 新增的JavaScript函式：用於切換可收合區塊的顯示狀態
+        function toggleCollapsible() {
+            const collapsibleHeader = document.querySelector('.collapsible');
+            const content = document.getElementById('workLeaveContent');
+            collapsibleHeader.classList.toggle('active');
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
     </script>
 </body>
 </html>
