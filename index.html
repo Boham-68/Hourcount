@@ -287,7 +287,7 @@
 
         <div class="flex-row">
             <div class="yellow-section">
-                <div class="collapsible" onclick="toggleCollapsible('workLeaveContent', this)">公假</div>
+                <div class="collapsible" onclick="toggleCollapsible()">公假</div>
                 <div class="content" id="workLeaveContent">
                     <p>
                         公假１
@@ -306,28 +306,6 @@
                     </p>
                     <p>輸入起始和結束日期，1月5日輸入「5」即可。</p>
                     <p>公假計算方式請詳閱說明。</p>
-                </div>
-                <div class="collapsible" onclick="toggleCollapsible('weekendLeaveContent', this)">週休二日</div>
-                <div class="content" id="weekendLeaveContent">
-                    <p>
-                        週休１
-                        <input type="number" id="WeekendLeave1" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WeekendLeave2" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        原上班天數：<span id="weekendWorkdays1">0</span>
-                        需請假天數：<span id="weekendAbsenceDays1">0</span>
-                    </p>
-                    <p>
-                        週休２
-                        <input type="number" id="WeekendLeave3" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">~
-                        <input type="number" id="WeekendLeave4" placeholder="0" class="small-input" min="0" step="1" oninput="calculateTotalLeave();">
-                    </p>
-                    <p>
-                        原上班天數：<span id="weekendWorkdays2">0</span>
-                        需請假天數：<span id="weekendAbsenceDays2">0</span>
-                    </p>
-                    <p>週休二日計算方式請詳閱說明。</p>
                 </div>
             </div>
             <div class="white-section">
@@ -426,30 +404,24 @@
 
         function getDaysInRange(startDate, endDate) {
             if (!startDate || !endDate || startDate > endDate) {
-                return { workdays: 0, classDays: 0, absenceDays: 0 };
+                return { workdays: 0, classDays: 0 };
             }
 
             let workdays = 0;
             let classDaysCount = 0;
-            let absenceDaysCount = 0;
             const selectedClass = document.getElementById("classSelect").value;
             const classes = ["d1", "d2", "d3", "d4"];
-            const dateWithoutTime = (d) => d.setHours(0, 0, 0, 0);
 
-            const daysSinceStart = Math.floor((dateWithoutTime(startDate) - dateWithoutTime(new Date('2025-01-01'))) / (1000 * 60 * 60 * 24));
+            const daysSinceStart = Math.floor((new Date(startDate) - new Date('2025-01-01')) / (1000 * 60 * 60 * 24));
             let currentClassIndex = daysSinceStart % classes.length;
 
             for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
                 const dayOfWeek = date.getDay();
-                const dateTimestamp = dateWithoutTime(date);
+                const dateWithoutTime = date.setHours(0, 0, 0, 0);
 
-                if ((dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateTimestamp)) ||
-                    makeupWorkDays.includes(dateTimestamp)) {
+                if ((dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateWithoutTime)) ||
+                    makeupWorkDays.includes(dateWithoutTime)) {
                     workdays++;
-                }
-
-                if (dayOfWeek >= 1 && dayOfWeek <= 5 && !holidays.includes(dateTimestamp) && !offDays.includes(dateTimestamp)) {
-                    absenceDaysCount++;
                 }
 
                 if (isClassDay(classes[currentClassIndex], selectedClass)) {
@@ -458,59 +430,19 @@
 
                 currentClassIndex = (currentClassIndex + 1) % classes.length;
             }
-            return { workdays, classDays: classDaysCount, absenceDays: absenceDaysCount };
+            return { workdays, classDays: classDaysCount };
         }
 
-        function calculateWorkdaysInWeekendRange() {
-            const year = parseInt(document.getElementById("yearSelect").value);
-            const month = parseInt(document.getElementById("monthSelect").value) - 1;
-            
-            // 週休1
-            const startDay1 = parseInt(document.getElementById("WeekendLeave1").value);
-            const endDay1 = parseInt(document.getElementById("WeekendLeave2").value);
-            const weekendWorkdaysElement1 = document.getElementById("weekendWorkdays1");
-            const weekendAbsenceDaysElement1 = document.getElementById("weekendAbsenceDays1");
-
-            if (startDay1 && endDay1) {
-                const startDate = new Date(year, month, startDay1);
-                const endDate = new Date(year, month, endDay1);
-                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
-                weekendWorkdaysElement1.textContent = classDays;
-                weekendAbsenceDaysElement1.textContent = absenceDays;
-            } else {
-                weekendWorkdaysElement1.textContent = 0;
-                weekendAbsenceDaysElement1.textContent = 0;
-            }
-
-            // 週休2
-            const startDay2 = parseInt(document.getElementById("WeekendLeave3").value);
-            const endDay2 = parseInt(document.getElementById("WeekendLeave4").value);
-            const weekendWorkdaysElement2 = document.getElementById("weekendWorkdays2");
-            const weekendAbsenceDaysElement2 = document.getElementById("weekendAbsenceDays2");
-
-            if (startDay2 && endDay2) {
-                const startDate = new Date(year, month, startDay2);
-                const endDate = new Date(year, month, endDay2);
-                const { classDays, absenceDays } = getDaysInRange(startDate, endDate);
-                weekendWorkdaysElement2.textContent = classDays;
-                weekendAbsenceDaysElement2.textContent = absenceDays;
-            } else {
-                weekendWorkdaysElement2.textContent = 0;
-                weekendAbsenceDaysElement2.textContent = 0;
-            }
-        }
-        
         function calculateLeaveData() {
             const year = parseInt(document.getElementById("yearSelect").value);
             const month = parseInt(document.getElementById("monthSelect").value) - 1;
+
             let totalWorkdays = 0;
             let totalClassDays = 0;
 
-            // 計算公假
-            const workLeaveIds = ['WorkLeave1', 'WorkLeave2', 'WorkLeave3', 'WorkLeave4', 'WorkLeave5', 'WorkLeave6'];
-            for (let i = 0; i < workLeaveIds.length; i += 2) {
-                const startDay = parseInt(document.getElementById(workLeaveIds[i]).value);
-                const endDay = parseInt(document.getElementById(workLeaveIds[i + 1]).value);
+            for (let i = 1; i <= 5; i += 2) {
+                const startDay = parseInt(document.getElementById(`WorkLeave${i}`).value);
+                const endDay = parseInt(document.getElementById(`WorkLeave${i + 1}`).value);
 
                 if (startDay && endDay) {
                     const startDate = new Date(year, month, startDay);
@@ -520,22 +452,6 @@
                     totalClassDays += classDays;
                 }
             }
-
-            // 計算週休二日
-            const weekendLeaveIds = ['WeekendLeave1', 'WeekendLeave2', 'WeekendLeave3', 'WeekendLeave4'];
-            for (let i = 0; i < weekendLeaveIds.length; i += 2) {
-                const startDay = parseInt(document.getElementById(weekendLeaveIds[i]).value);
-                const endDay = parseInt(document.getElementById(weekendLeaveIds[i + 1]).value);
-
-                if (startDay && endDay) {
-                    const startDate = new Date(year, month, startDay);
-                    const endDate = new Date(year, month, endDay);
-                    const { workdays, classDays } = getDaysInRange(startDate, endDate);
-                    totalWorkdays += workdays;
-                    totalClassDays += classDays;
-                }
-            }
-
             return { totalWorkdays, totalClassDays };
         }
 
@@ -605,7 +521,6 @@
         }
 
         function calculateTotalLeave() {
-            // 讀取各種假別和停休天數
             const inputs = ['Leave1', 'Leave2', 'Leave3', 'Leave4', 'Leave5', 'Class1', 'Class2', 'Class3'];
             const [leave1, leave2, leave3, leave4, leave5, class1, class2, class3] = inputs.map(id => {
                 const value = document.getElementById(id).value;
@@ -614,21 +529,9 @@
 
             const actualLeave1 = document.getElementById("Leave1").value === "" ? 2 : leave1;
 
-            // 確保週休二日天數已經被計算並顯示在畫面上
-            calculateWorkdaysInWeekendRange();
-
-            // 讀取週休二日的計算結果
-            const weekendWorkdays1 = parseInt(document.getElementById("weekendWorkdays1").textContent) || 0;
-            const weekendAbsenceDays1 = parseInt(document.getElementById("weekendAbsenceDays1").textContent) || 0;
-            const weekendWorkdays2 = parseInt(document.getElementById("weekendWorkdays2").textContent) || 0;
-            const weekendAbsenceDays2 = parseInt(document.getElementById("weekendAbsenceDays2").textContent) || 0;
-            
-            // 計算週休二日的須請假天數和原上班天數的差值
-            const weekendLeaveDifference = (weekendAbsenceDays1 - weekendWorkdays1) + (weekendAbsenceDays2 - weekendWorkdays2);
-
-            // 根據新的邏輯計算實際上班天數
             const { totalWorkdays, totalClassDays } = calculateLeaveData();
-            const allLeave = classDays - actualLeave1 - leave2 - leave3 - leave4 - leave5 + class1 - totalClassDays + weekendLeaveDifference;
+
+            const allLeave = classDays - actualLeave1 - leave2 - leave3 - leave4 - leave5 + class1 - totalClassDays;
             const halfLeave = leave5 + class2;
 
             document.getElementById("AllLeave").textContent = allLeave;
@@ -727,9 +630,10 @@
         });
 
         // 新增的JavaScript函式：用於切換可收合區塊的顯示狀態
-        function toggleCollapsible(contentId, header) {
-            const content = document.getElementById(contentId);
-            header.classList.toggle('active');
+        function toggleCollapsible() {
+            const collapsibleHeader = document.querySelector('.collapsible');
+            const content = document.getElementById('workLeaveContent');
+            collapsibleHeader.classList.toggle('active');
             if (content.style.display === "block") {
                 content.style.display = "none";
             } else {
