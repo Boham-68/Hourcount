@@ -405,8 +405,8 @@
             };
 
             const workShifts2 = {
-                E: [0],
-                F: [1]
+                E: [1],
+                F: [0]
             };
 
             const classSelect = document.getElementById('classSelect');
@@ -426,9 +426,9 @@
                     }
                 } else if (['E', 'F'].includes(classType)) {
                     if (workShifts2[classType].includes(dayOffset2)) {
-                        option.textContent = `${classType}班，${formattedDate}上班`;
-                    } else {
                         option.textContent = `${classType}班，${formattedDate}輪休`;
+                    } else {
+                        option.textContent = `${classType}班，${formattedDate}上班`;
                     }
                 } else {
                     option.textContent = `${classType}班`;
@@ -502,8 +502,8 @@
                 D: [1, 2]
             };
             const classMapping2 = {
-                E: [0],
-                F: [1]
+                E: [1],
+                F: [0]
             };
 
             if (classMapping4[selectedClass]) {
@@ -829,3 +829,4 @@
     </script>
 </body>
 </html>
+
