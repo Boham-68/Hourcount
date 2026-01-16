@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -236,7 +237,9 @@
                         <option value="11">11</option>
                         <option value="12">12</option>
                     </select>
-                    月　
+                    月
+                   <label style="margin-left: 15px;">每日休息</label>
+                   <input type="number" id="RestHours" value="3" class="small-input" min="0" max="24" oninput="calculateClassDays();">小時　
                 </div>
                 <div class="green-item">
                     <label>基本工時：</label>
@@ -671,6 +674,10 @@
         }
 
         function calculateTotalLeave() {
+            // 1. 先讀取「每日休息」的值
+            const restHours = parseFloat(document.getElementById("RestHours").value) || 0;
+            // 計算每日實際工時 (取代原本固定的 21)
+            const dailyWorkHours = 24 - restHours;
             // 讀取各種假別和停休天數
             const inputs = ['Leave1', 'Leave2', 'Leave3', 'Leave4', 'Leave5', 'Class1', 'Class2', 'Class3'];
             const [leave1, leave2, leave3, leave4, leave5, class1, class2, class3] = inputs.map(id => {
@@ -723,7 +730,7 @@
             document.getElementById("HalfLeave").textContent = halfLeave;
 
             const basicHour = parseInt(document.getElementById("BasicHour").textContent) || 0;
-            const workHour1 = (actualWorkDays * 21) + (halfLeave * 10) + (leave2 * 12) + (leave3 * 8) + class3 + (totalWorkdays * 8);
+            const workHour1 = (actualWorkDays * dailyWorkHours) + (halfLeave * 10) + (leave2 * 12) + (leave3 * 8) + class3 + (totalWorkdays * 8);
             
             document.getElementById("WorkHour1").textContent = workHour1;
 
@@ -829,6 +836,3 @@
     </script>
 </body>
 </html>
-
-
-
