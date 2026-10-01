@@ -908,7 +908,8 @@ function initializeDefaultDate() {
 }
 
 /** 從 GitHub 抓取最新修訂公告 */
-const updatesUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
+const rawUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
+const updatesUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`;
 
 async function fetchAndDisplayUpdates() {
     // 移至函式內部取得 DOM 元素，確保 HTML 已經載入完畢
