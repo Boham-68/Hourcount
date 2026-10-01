@@ -230,7 +230,7 @@
         <!-- 頂部主要控制區 (綠色區塊) -->
         <div class="green-section">
             <h1>臺南市消防局外勤工時計算</h1>
-            <div class="marquee" id="marquee-container"><span>載入中...</span></div>            
+<div class="marquee" id="marquee-container"><span>載入中...</span></div>           
             <div class="green-content">
                 <!-- 班別選擇與說明 -->
                 <div class="green-item full-width">
@@ -408,8 +408,14 @@
                     外宿：<span id="HalfLeave"></span>
                 </p>
                 <p>　　　　　　　　　　※　麻豆分隊　莊伯瀚　製作　※</p>
-                <div id="updates-container"></div>
+                <div id="announcement-block" class="announcement-card">
+    <div id="announcement-content" class="announcement-content">載入中...</div>
+</div>
                 <p>☆ 本表僅供參考，實際數字以超勤報表為準。</p>
+
+<!-- 引入檔案：先載入公告資料檔 update.js，再載入主程式 script.js -->
+<script src="update.js"></script>
+<script src="script.js"></script>
             </div>
         </div>
     </div>
@@ -873,86 +879,86 @@ function calculateWorkdaysInWeekendRange() {
             calculateTotalLeave();
         }
 
-/* ----------------------------------------------------------------------
- * [4-5] 本地儲存與外部資料載入 (Storage & Fetch)
- * ---------------------------------------------------------------------- */
+        /* ----------------------------------------------------------------------
+         * [4-5] 本地儲存與外部資料載入 (Storage & Fetch)
+         * ---------------------------------------------------------------------- */
 
-function saveClassSelection() {
-    localStorage.setItem('classSelect', document.getElementById('classSelect').value);
-}
-
-function saveHourMoney() {
-    localStorage.setItem('HourMoney', document.getElementById('HourMoney').value);
-}
-
-/** 自動定位預設月份 (若超過10號則預設為下個月) */
-function initializeDefaultDate() {
-    const today = new Date();
-    let targetYear = today.getFullYear();
-    let targetMonth = today.getMonth() + 1;
-
-    if (today.getDate() > 10) {
-        targetMonth += 1;
-        if (targetMonth > 12) {
-            targetMonth = 1;
-            targetYear += 1;
+        function saveClassSelection() {
+            localStorage.setItem('classSelect', document.getElementById('classSelect').value);
         }
-    }
 
-    const yearSelect = document.getElementById('yearSelect');
-    const monthSelect = document.getElementById('monthSelect');
-    if (yearSelect && monthSelect) {
-        yearSelect.value = targetYear.toString();
-        monthSelect.value = targetMonth.toString();
-    }
-}
+        function saveHourMoney() {
+            localStorage.setItem('HourMoney', document.getElementById('HourMoney').value);
+        }
 
-/** 從 GitHub 抓取最新修訂公告 */
-const rawUrl = 'https://raw.githubusercontent.com/Boham-68/Hourcount/main/update';
-const updatesUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`;
+        /** 自動定位預設月份 (若超過10號則預設為下個月) */
+        function initializeDefaultDate() {
+            const today = new Date();
+            let targetYear = today.getFullYear();
+            let targetMonth = today.getMonth() + 1;
 
-async function fetchAndDisplayUpdates() {
-    // 移至函式內部取得 DOM 元素，確保 HTML 已經載入完畢
-    const updatesContainer = document.getElementById('updates-container');
+            if (today.getDate() > 10) {
+                targetMonth += 1;
+                if (targetMonth > 12) {
+                    targetMonth = 1;
+                    targetYear += 1;
+                }
+            }
+
+            const yearSelect = document.getElementById('yearSelect');
+            const monthSelect = document.getElementById('monthSelect');
+            if (yearSelect && monthSelect) {
+                yearSelect.value = targetYear.toString();
+                monthSelect.value = targetMonth.toString();
+            }
+        }
+
+/* ----------------------------------------------------------------------
+ * 最新公告與跑馬燈載入邏輯 (抓取 update.js 前三行)
+ * ---------------------------------------------------------------------- */
+function loadAnnouncements() {
+    const container = document.getElementById('announcement-content');
     const marqueeContainer = document.getElementById('marquee-container');
 
-    try {
-        const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
-        if (!response.ok) {
-            throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-        }
-        const text = await response.text();
-        const lines = text.split('\n');
-        const recentUpdates = lines.slice(0, 3).filter(line => line.trim() !== '');
+    // 檢查 update.js 是否成功載入
+    if (typeof announcementData !== 'undefined' && Array.isArray(announcementData)) {
+        // 過濾空白項目並只擷取前 3 行
+        const topThreeLines = announcementData
+            .filter(line => line && line.trim() !== '')
+            .slice(0, 3);
 
-        if (recentUpdates.length > 0) {
-            const updatesText = recentUpdates.join(' | ');
-            if (marqueeContainer) {
-                marqueeContainer.innerHTML = `<span>${updatesText}</span>`;
-            }
-
-            if (updatesContainer) {
-                updatesContainer.innerHTML = '';
+        if (topThreeLines.length > 0) {
+            // 1. 渲染下方卡片清單 (條列式)
+            if (container) {
                 const ul = document.createElement('ul');
-                recentUpdates.forEach(update => {
+                topThreeLines.forEach(text => {
                     const li = document.createElement('li');
-                    li.textContent = update;
+                    li.textContent = text;
                     ul.appendChild(li);
                 });
-                updatesContainer.appendChild(ul);
+                container.innerHTML = '';
+                container.appendChild(ul);
+            }
+
+            // 2. 渲染上方跑馬燈內容 (將前 3 行用分隔點串接寫入 span)
+            if (marqueeContainer) {
+                const marqueeText = topThreeLines.join('   　　   ');
+                marqueeContainer.innerHTML = `<span>${marqueeText}</span>`;
             }
         } else {
-            const noUpdatesMessage = '目前沒有更新紀錄。';
-            if (updatesContainer) updatesContainer.textContent = noUpdatesMessage;
-            if (marqueeContainer) marqueeContainer.innerHTML = `<span>${noUpdatesMessage}</span>`;
+            const noDataText = '目前暫無公告。';
+            if (container) container.textContent = noDataText;
+            if (marqueeContainer) marqueeContainer.innerHTML = `<span>${noDataText}</span>`;
         }
-    } catch (error) {
-        console.error('抓取更新資料時發生錯誤:', error);
-        const errorMessage = '無法載入更新紀錄。';
-        if (updatesContainer) updatesContainer.textContent = errorMessage;
-        if (marqueeContainer) marqueeContainer.innerHTML = `<span>${errorMessage}</span>`;
+    } else {
+        const errorText = '無法讀取公告資料。';
+        if (container) container.textContent = errorText;
+        if (marqueeContainer) marqueeContainer.innerHTML = `<span>${errorText}</span>`;
     }
 }
+
+// 確保網頁 DOM 元素完全載入後再執行
+document.addEventListener('DOMContentLoaded', loadAnnouncements);
 
         /** 收合清單開關切換 */
         function toggleCollapsible(contentId, header) {
@@ -960,6 +966,7 @@ async function fetchAndDisplayUpdates() {
             header.classList.toggle('active');
             content.style.display = content.style.display === "block" ? "none" : "block";
         }
+
 
         /* ----------------------------------------------------------------------
          * [4-6] 頁面初始化 (DOM Loaded Event)
