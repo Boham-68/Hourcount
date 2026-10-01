@@ -910,42 +910,44 @@ function calculateWorkdaysInWeekendRange() {
         }
 
         /** 從 GitHub 抓取最新修訂公告 */
-        async function fetchAndDisplayUpdates() {
-            const updatesContainer = document.getElementById('updates-container');
-            const marqueeContainer = document.getElementById('marquee-container');
+async function fetchAndDisplayUpdates() {
+    const updatesContainer = document.getElementById('updates-container');
+    const marqueeContainer = document.getElementById('marquee-container');
 
-            try {
-                const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
-                if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                
-                const text = await response.text();
-                const lines = text.split('\n');
-                const recentUpdates = lines.slice(0, 3).filter(line => line.trim() !== '');
+    try {
+        const response = await fetch(`${updatesUrl}?t=${new Date().getTime()}`);
+        if (!response.ok) throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+        
+        const text = await response.text();
+        const lines = text.split('\n');
+        const recentUpdates = lines.slice(0, 3).filter(line => line.trim() !== '');
 
-                if (recentUpdates.length > 0) {
-                    const updatesText = recentUpdates.join(' | ');
-                    marqueeContainer.innerHTML = `<span>${updatesText}</span>`;
+        let updatesText = '目前沒有更新紀錄。';
+        if (recentUpdates.length > 0) {
+            updatesText = recentUpdates.join(' | ');
 
-                    updatesContainer.innerHTML = '';
-                    const ul = document.createElement('ul');
-                    recentUpdates.forEach(update => {
-                        const li = document.createElement('li');
-                        li.textContent = update;
-                        ul.appendChild(li);
-                    });
-                    updatesContainer.appendChild(ul);
-                } else {
-                    const msg = '目前沒有更新紀錄。';
-                    updatesContainer.textContent = msg;
-                    marqueeContainer.innerHTML = `<span>${msg}</span>`;
-                }
-            } catch (error) {
-                console.error('抓取更新資料時發生錯誤:', error);
-                const errorMsg = '無法載入更新紀錄。';
-                updatesContainer.textContent = errorMsg;
-                marqueeContainer.innerHTML = `<span>${errorMsg}</span>`;
-            }
+            updatesContainer.innerHTML = '';
+            const ul = document.createElement('ul');
+            recentUpdates.forEach(update => {
+                const li = document.createElement('li');
+                li.textContent = update;
+                ul.appendChild(li);
+            });
+            updatesContainer.appendChild(ul);
+        } else {
+            updatesContainer.textContent = updatesText;
         }
+
+        // 複製兩份內容，確保跑馬燈連續滾動不卡住
+        marqueeContainer.innerHTML = `<span>${updatesText} &nbsp;&nbsp;&nbsp;&nbsp;</span><span>${updatesText} &nbsp;&nbsp;&nbsp;&nbsp;</span>`;
+
+    } catch (error) {
+        console.error('抓取更新資料時發生錯誤:', error);
+        const errorMsg = '無法載入更新紀錄。';
+        updatesContainer.textContent = errorMsg;
+        marqueeContainer.innerHTML = `<span>${errorMsg}</span>`;
+    }
+}
 
         /** 收合清單開關切換 */
         function toggleCollapsible(contentId, header) {
