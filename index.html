@@ -119,23 +119,44 @@
             .red-section, .blue-section, .yellow-section, .white-section { width: 50%; }
         }
 
-        /* --- 跑馬燈動畫 --- */
-        .marquee {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: border-box;
-            margin-bottom: 5px;
-        }
-        .marquee span {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 30s linear infinite;
-        }
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-100%); }
-        }
+        /* --- 跑馬燈外框 --- */
+.marquee {
+    display: flex;                  /* 讓「左側標籤」與「右側滾動文字」並排 */
+    align-items: center;            /* 垂直居中對齊 */
+    width: 100%;
+    overflow: hidden;               /* 隱藏超出範圍的文字 */
+    white-space: nowrap;            /* 強制文字不換行 */
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    background: transparent;        /* 跑馬燈外框維持無底色 */
+    border: none;                   /* 無外框 */
+}
+
+/* --- 左側固定「最新公告📢」標籤 (利用背景色遮擋文字) --- */
+.marquee::before {
+    content: "最新公告 📢";         /* 圖案與文字內容 */
+    flex-shrink: 0;                /* 防止標籤被擠壓變形 */
+    font-weight: bold;
+    font-size: 0.95em;
+    padding-right: 12px;           /* 標籤與滾動文字之間的安全距離 */
+    color: #000000;                 /* 黑色文字 */
+    background-color: #ffffff;      /* 關鍵：設定與網頁背景相同的顏色 (若網頁底色不是白色，請修改此處) */
+    z-index: 2;                     /* 確保蓋在滾動文字上方 */
+}
+
+/* --- 右側滾動文字區域 --- */
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;             /* 讓文字從右側外緣滑入 */
+    animation: marquee 40s linear infinite;
+    color: #333333;                 /* 滾動文字顏色 */
+}
+
+/* --- 動畫軌跡 --- */
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
 
         /* --- 可收合選單 (Collapsible) --- */
         .collapsible {
